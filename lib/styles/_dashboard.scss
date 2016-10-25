@@ -1,0 +1,32 @@
+.DashboardView {
+  display: flex;
+}
+
+.Dashboard {
+  flex: 3;
+  margin: auto;
+  text-align: center;
+}
+
+.NatureQuote {
+  margin: 10px 0;
+}
+
+.SideBar {
+  flex: 1;
+  background: #2C5D63;
+  height: 500px;
+  text-align: center;
+}
+
+.SideTitle {
+  color: #A2C11C;
+  font-family: $header-font;
+  margin: 15px 0;
+  font-size: 2.5em;
+}
+
+.ZipSearch {
+  text-align: center;
+  margin-right: 50px;
+}

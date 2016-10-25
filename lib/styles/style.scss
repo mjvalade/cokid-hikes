@@ -1,9 +1,12 @@
 @import '_reset';
+@import '_variables';
 @import '_header';
+@import '_dashboard';
 @import '_new-trail';
 
 $primary-text-color: green;
 
 body {
-  color: $primary-text-color
+  color: $primary-text-color;
+  font-family: $main-font;
 }
