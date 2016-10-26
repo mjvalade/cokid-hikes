@@ -1,21 +1,51 @@
+.NewTrailForm {
+  display: flex;
+}
+
 .NewTitle {
   color: #A2C11C;
   font-family: $header-font;
   font-size: 50px;
-  padding-left: 10px;
-
+  margin: 10px 0 10px 10px;
 }
 
 .InputArea {
-  display: flex;
+  border: 1px dashed grey;
+  flex: 1;
   flex-direction: column;
+  margin: 10px 0 0 10px;
 }
 
 label {
-  margin: 5px 0;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+input,
+textarea {
+  border: none;
+  border-bottom: 2px solid #2C5D63;
+  margin-left: 5px;
 }
 
 .SaveButton {
   height: 20px;
   width: 50px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  background: #2C5D63;
+}
+
+.MapRank {
+  border: 1px dashed grey;
+  flex: 2;
+  margin: 10px 0 0 10px;
+
+}
+
+.TrailheadMap {
+  margin-top: 20px;
+  height: 400px;
+  width: 400px;
 }
