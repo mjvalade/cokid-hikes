@@ -13,6 +13,12 @@
   letter-spacing: 0px;
   padding-left: 10px;
   @media screen and (min-width: 700px){
+    font-size: 60px;
+  }
+  @media screen and (min-width: 900px){
+    font-size: 62px;
+  }
+  @media screen and (min-width: 960px){
     font-size: 72px;
   }
 }

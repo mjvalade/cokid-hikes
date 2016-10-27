@@ -19,6 +19,7 @@
 label {
   display: flex;
   margin-bottom: 10px;
+  font-size: 1em;
 }
 
 input,
@@ -26,21 +27,30 @@ textarea {
   border: none;
   border-bottom: 2px solid #2C5D63;
   margin-left: 5px;
+  font-size: 1em;
+}
+
+.NewTrailField {
+  float: right;
 }
 
 .SaveButton {
-  height: 20px;
-  width: 50px;
+  height: 30px;
+  width: 60px;
   border-radius: 5px;
   border: none;
   color: white;
   background: #2C5D63;
+  font-size: 1em;
+  &:hover {
+    border: 1px solid #A2C11C;
+  }
 }
 
 .MapRank {
   border: 1px dashed grey;
   flex: 2;
-  margin: 10px 0 0 10px;
+  // margin: 10px 0 0 10px;
 
 }
 

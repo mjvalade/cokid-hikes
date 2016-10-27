@@ -8187,44 +8187,47 @@
 	
 	var _reactRedux = __webpack_require__(469);
 	
-	var _firebase = __webpack_require__(497);
+	var _firebase = __webpack_require__(493);
 	
 	var _firebase2 = _interopRequireDefault(_firebase);
 	
-	var _store = __webpack_require__(503);
+	var _store = __webpack_require__(499);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
-	var _reactRouter = __webpack_require__(507);
+	var _auth = __webpack_require__(503);
 	
-	var _Header = __webpack_require__(544);
+	var actions = _interopRequireWildcard(_auth);
+	
+	var _reactRouter = __webpack_require__(504);
+	
+	var _Header = __webpack_require__(540);
 	
 	var _Header2 = _interopRequireDefault(_Header);
 	
-	var _Application = __webpack_require__(547);
+	var _Application = __webpack_require__(542);
 	
 	var _Application2 = _interopRequireDefault(_Application);
 	
-	var _NewTrailContainer = __webpack_require__(552);
+	var _NewTrailContainer = __webpack_require__(547);
 	
 	var _NewTrailContainer2 = _interopRequireDefault(_NewTrailContainer);
 	
-	var _TrailList = __webpack_require__(555);
+	var _TrailList = __webpack_require__(550);
 	
 	var _TrailList2 = _interopRequireDefault(_TrailList);
 	
-	var _NoMatch = __webpack_require__(557);
+	var _NoMatch = __webpack_require__(552);
 	
 	var _NoMatch2 = _interopRequireDefault(_NoMatch);
 	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// require("!style!css!sass!./styles/style.scss");
+	__webpack_require__(553);
 	
 	// import trails from './reducers/trails-reducer';
-	
-	__webpack_require__(558);
-	
 	// const store = createStore(trails, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 	
 	(0, _reactDom.render)(_react2.default.createElement(
@@ -29608,15 +29611,15 @@
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	var _isPlainObject = __webpack_require__(491);
+	var _isPlainObject = __webpack_require__(478);
 	
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 	
-	var _hoistNonReactStatics = __webpack_require__(495);
+	var _hoistNonReactStatics = __webpack_require__(491);
 	
 	var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
 	
-	var _invariant = __webpack_require__(496);
+	var _invariant = __webpack_require__(492);
 	
 	var _invariant2 = _interopRequireDefault(_invariant);
 	
@@ -30914,148 +30917,6 @@
 
 /***/ },
 /* 491 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var getPrototype = __webpack_require__(492),
-	    isObjectLike = __webpack_require__(494);
-	
-	/** `Object#toString` result references. */
-	var objectTag = '[object Object]';
-	
-	/** Used for built-in method references. */
-	var funcProto = Function.prototype,
-	    objectProto = Object.prototype;
-	
-	/** Used to resolve the decompiled source of functions. */
-	var funcToString = funcProto.toString;
-	
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-	
-	/** Used to infer the `Object` constructor. */
-	var objectCtorString = funcToString.call(Object);
-	
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objectToString = objectProto.toString;
-	
-	/**
-	 * Checks if `value` is a plain object, that is, an object created by the
-	 * `Object` constructor or one with a `[[Prototype]]` of `null`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.8.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 * }
-	 *
-	 * _.isPlainObject(new Foo);
-	 * // => false
-	 *
-	 * _.isPlainObject([1, 2, 3]);
-	 * // => false
-	 *
-	 * _.isPlainObject({ 'x': 0, 'y': 0 });
-	 * // => true
-	 *
-	 * _.isPlainObject(Object.create(null));
-	 * // => true
-	 */
-	function isPlainObject(value) {
-	  if (!isObjectLike(value) || objectToString.call(value) != objectTag) {
-	    return false;
-	  }
-	  var proto = getPrototype(value);
-	  if (proto === null) {
-	    return true;
-	  }
-	  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
-	  return (typeof Ctor == 'function' &&
-	    Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString);
-	}
-	
-	module.exports = isPlainObject;
-
-
-/***/ },
-/* 492 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var overArg = __webpack_require__(493);
-	
-	/** Built-in value references. */
-	var getPrototype = overArg(Object.getPrototypeOf, Object);
-	
-	module.exports = getPrototype;
-
-
-/***/ },
-/* 493 */
-/***/ function(module, exports) {
-
-	/**
-	 * Creates a unary function that invokes `func` with its argument transformed.
-	 *
-	 * @private
-	 * @param {Function} func The function to wrap.
-	 * @param {Function} transform The argument transform.
-	 * @returns {Function} Returns the new function.
-	 */
-	function overArg(func, transform) {
-	  return function(arg) {
-	    return func(transform(arg));
-	  };
-	}
-	
-	module.exports = overArg;
-
-
-/***/ },
-/* 494 */
-/***/ function(module, exports) {
-
-	/**
-	 * Checks if `value` is object-like. A value is object-like if it's not `null`
-	 * and has a `typeof` result of "object".
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 * @example
-	 *
-	 * _.isObjectLike({});
-	 * // => true
-	 *
-	 * _.isObjectLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObjectLike(_.noop);
-	 * // => false
-	 *
-	 * _.isObjectLike(null);
-	 * // => false
-	 */
-	function isObjectLike(value) {
-	  return value != null && typeof value == 'object';
-	}
-	
-	module.exports = isObjectLike;
-
-
-/***/ },
-/* 495 */
 /***/ function(module, exports) {
 
 	/**
@@ -31111,7 +30972,7 @@
 
 
 /***/ },
-/* 496 */
+/* 492 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31169,7 +31030,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 497 */
+/* 493 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31179,16 +31040,16 @@
 	 *
 	 *   firebase = require('firebase');
 	 */
-	var firebase = __webpack_require__(498);
-	__webpack_require__(499);
-	__webpack_require__(500);
-	__webpack_require__(501);
-	__webpack_require__(502);
+	var firebase = __webpack_require__(494);
+	__webpack_require__(495);
+	__webpack_require__(496);
+	__webpack_require__(497);
+	__webpack_require__(498);
 	module.exports = firebase;
 
 
 /***/ },
-/* 498 */
+/* 494 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*! @license Firebase v3.5.1
@@ -31232,10 +31093,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 499 */
+/* 495 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(498);
+	var firebase = __webpack_require__(494);
 	/*! @license Firebase v3.5.1
 	    Build: 3.5.1-rc.1
 	    Terms: https://developers.google.com/terms */
@@ -31465,10 +31326,10 @@
 
 
 /***/ },
-/* 500 */
+/* 496 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(498);
+	var firebase = __webpack_require__(494);
 	/*! @license Firebase v3.5.1
 	    Build: 3.5.1-rc.1
 	    Terms: https://developers.google.com/terms */
@@ -31717,10 +31578,10 @@
 
 
 /***/ },
-/* 501 */
+/* 497 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var firebase = __webpack_require__(498);
+	var firebase = __webpack_require__(494);
 	/*! @license Firebase v3.5.1
 	    Build: 3.5.1-rc.1
 	    Terms: https://developers.google.com/terms */
@@ -31829,10 +31690,10 @@
 
 
 /***/ },
-/* 502 */
+/* 498 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(498);
+	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(494);
 	/*! @license Firebase v3.5.1
 	    Build: 3.5.1-rc.1
 	    Terms: https://developers.google.com/terms */
@@ -31880,7 +31741,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 503 */
+/* 499 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31891,15 +31752,15 @@
 	
 	var _redux = __webpack_require__(476);
 	
-	var _reduxThunk = __webpack_require__(504);
+	var _reduxThunk = __webpack_require__(500);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _authReducer = __webpack_require__(505);
+	var _authReducer = __webpack_require__(501);
 	
 	var _authReducer2 = _interopRequireDefault(_authReducer);
 	
-	var _initialState = __webpack_require__(506);
+	var _initialState = __webpack_require__(502);
 	
 	var _initialState2 = _interopRequireDefault(_initialState);
 	
@@ -31910,7 +31771,7 @@
 	}), _initialState2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default));
 
 /***/ },
-/* 504 */
+/* 500 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31938,7 +31799,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 505 */
+/* 501 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31948,13 +31809,19 @@
 	});
 	exports.default = authReducer;
 	
-	var _initialState = __webpack_require__(506);
+	var _initialState = __webpack_require__(502);
 	
 	function authReducer() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _initialState.initialState.auth;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
+	    case 'ATTEMPTING_LOGIN':
+	      return {
+	        status: 'AWATING_AUTH_RESPONSE',
+	        username: 'guest',
+	        uid: null
+	      };
 	    case 'LOGOUT':
 	      return {
 	        status: 'ANONYMOUS',
@@ -31973,7 +31840,7 @@
 	}
 
 /***/ },
-/* 506 */
+/* 502 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31994,7 +31861,88 @@
 	};
 
 /***/ },
-/* 507 */
+/* 503 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.logOut = exports.logIn = exports.startListeningToAuth = undefined;
+	
+	var _firebase = __webpack_require__(493);
+	
+	var _firebase2 = _interopRequireDefault(_firebase);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var firebaseApp = _firebase2.default.initializeApp({
+	  apiKey: "AIzaSyAjWOGb8Tl-WWTxDRtRDud4ot4ojzVuGFU",
+	  authDomain: "co-kid-hikes.firebaseapp.com",
+	  databaseURL: "https://co-kid-hikes.firebaseio.com",
+	  storageBucket: "co-kid-hikes.appspot.com",
+	  messagingSenderId: "548128761061"
+	});
+	
+	var google = new _firebase2.default.auth.GoogleAuthProvider();
+	
+	function startListeningToAuth() {
+	  return function (dispatch, getState) {
+	    _firebase2.default.auth().onAuthStateChanged(function (authData) {
+	      if (authData) {
+	        dispatch({
+	          type: 'LOGIN',
+	          uid: authData.uid,
+	          username: authData.displayName
+	        });
+	      } else {
+	        if (getState().auth.status !== 'ANONYMOUS') {
+	          dispatch({
+	            type: 'LOGOUT'
+	          });
+	        }
+	      }
+	    });
+	  };
+	}
+	
+	function logIn() {
+	  return function (dispatch) {
+	    dispatch({
+	      type: 'ATTEMPTING_LOGIN'
+	    });
+	
+	    _firebase2.default.auth().signInWithPopup(google).then(function (result) {
+	      dispatch({
+	        type: 'LOGIN',
+	        uid: result.user.uid,
+	        username: result.user.displayName
+	      });
+	    }).catch(function (error) {
+	      console.log('Error logging in: ', error);
+	    });
+	  };
+	}
+	
+	function logOut() {
+	  return function (dispatch) {
+	    dispatch({
+	      type: 'LOGOUT'
+	    });
+	
+	    _firebase2.default.auth.signOut().then(function () {
+	      console.log('Sign out successful!');
+	    });
+	  };
+	}
+	
+	exports.startListeningToAuth = startListeningToAuth;
+	exports.logIn = logIn;
+	exports.logOut = logOut;
+
+/***/ },
+/* 504 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32002,51 +31950,51 @@
 	exports.__esModule = true;
 	exports.createServerRenderContext = exports.matchPattern = exports.StaticRouter = exports.ServerRouter = exports.MemoryRouter = exports.HashRouter = exports.BrowserRouter = exports.Redirect = exports.NavigationPrompt = exports.Miss = exports.Match = exports.Link = undefined;
 	
-	var _Link2 = __webpack_require__(508);
+	var _Link2 = __webpack_require__(505);
 	
 	var _Link3 = _interopRequireDefault(_Link2);
 	
-	var _Match2 = __webpack_require__(510);
+	var _Match2 = __webpack_require__(507);
 	
 	var _Match3 = _interopRequireDefault(_Match2);
 	
-	var _Miss2 = __webpack_require__(515);
+	var _Miss2 = __webpack_require__(512);
 	
 	var _Miss3 = _interopRequireDefault(_Miss2);
 	
-	var _Prompt = __webpack_require__(516);
+	var _Prompt = __webpack_require__(513);
 	
 	var _Prompt2 = _interopRequireDefault(_Prompt);
 	
-	var _Redirect2 = __webpack_require__(518);
+	var _Redirect2 = __webpack_require__(515);
 	
 	var _Redirect3 = _interopRequireDefault(_Redirect2);
 	
-	var _BrowserRouter2 = __webpack_require__(519);
+	var _BrowserRouter2 = __webpack_require__(516);
 	
 	var _BrowserRouter3 = _interopRequireDefault(_BrowserRouter2);
 	
-	var _HashRouter2 = __webpack_require__(536);
+	var _HashRouter2 = __webpack_require__(532);
 	
 	var _HashRouter3 = _interopRequireDefault(_HashRouter2);
 	
-	var _MemoryRouter2 = __webpack_require__(539);
+	var _MemoryRouter2 = __webpack_require__(535);
 	
 	var _MemoryRouter3 = _interopRequireDefault(_MemoryRouter2);
 	
-	var _ServerRouter2 = __webpack_require__(542);
+	var _ServerRouter2 = __webpack_require__(538);
 	
 	var _ServerRouter3 = _interopRequireDefault(_ServerRouter2);
 	
-	var _StaticRouter2 = __webpack_require__(531);
+	var _StaticRouter2 = __webpack_require__(527);
 	
 	var _StaticRouter3 = _interopRequireDefault(_StaticRouter2);
 	
-	var _matchPattern2 = __webpack_require__(512);
+	var _matchPattern2 = __webpack_require__(509);
 	
 	var _matchPattern3 = _interopRequireDefault(_matchPattern2);
 	
-	var _createServerRenderContext2 = __webpack_require__(543);
+	var _createServerRenderContext2 = __webpack_require__(539);
 	
 	var _createServerRenderContext3 = _interopRequireDefault(_createServerRenderContext2);
 	
@@ -32078,7 +32026,7 @@
 	exports.createServerRenderContext = _createServerRenderContext3.default;
 
 /***/ },
-/* 508 */
+/* 505 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32093,7 +32041,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(509);
+	var _PropTypes = __webpack_require__(506);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -32270,7 +32218,7 @@
 	exports.default = Link;
 
 /***/ },
-/* 509 */
+/* 506 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32317,7 +32265,7 @@
 	});
 
 /***/ },
-/* 510 */
+/* 507 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32330,11 +32278,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _MatchProvider = __webpack_require__(511);
+	var _MatchProvider = __webpack_require__(508);
 	
 	var _MatchProvider2 = _interopRequireDefault(_MatchProvider);
 	
-	var _matchPattern = __webpack_require__(512);
+	var _matchPattern = __webpack_require__(509);
 	
 	var _matchPattern2 = _interopRequireDefault(_matchPattern);
 	
@@ -32471,7 +32419,7 @@
 	exports.default = Match;
 
 /***/ },
-/* 511 */
+/* 508 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32482,7 +32430,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(509);
+	var _PropTypes = __webpack_require__(506);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -32591,14 +32539,14 @@
 	exports.default = MatchProvider;
 
 /***/ },
-/* 512 */
+/* 509 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _pathToRegexp = __webpack_require__(513);
+	var _pathToRegexp = __webpack_require__(510);
 	
 	var _pathToRegexp2 = _interopRequireDefault(_pathToRegexp);
 	
@@ -32662,10 +32610,10 @@
 	exports.default = matchPattern;
 
 /***/ },
-/* 513 */
+/* 510 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isarray = __webpack_require__(514)
+	var isarray = __webpack_require__(511)
 	
 	/**
 	 * Expose `pathToRegexp`.
@@ -33093,7 +33041,7 @@
 
 
 /***/ },
-/* 514 */
+/* 511 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -33102,7 +33050,7 @@
 
 
 /***/ },
-/* 515 */
+/* 512 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33113,7 +33061,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(509);
+	var _PropTypes = __webpack_require__(506);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -33193,7 +33141,7 @@
 	exports.default = Miss;
 
 /***/ },
-/* 516 */
+/* 513 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33204,7 +33152,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(517);
+	var _PropTypes = __webpack_require__(514);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -33270,7 +33218,7 @@
 	exports.default = Prompt;
 
 /***/ },
-/* 517 */
+/* 514 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33303,7 +33251,7 @@
 	});
 
 /***/ },
-/* 518 */
+/* 515 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33314,7 +33262,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(509);
+	var _PropTypes = __webpack_require__(506);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -33365,7 +33313,7 @@
 	exports.default = Redirect;
 
 /***/ },
-/* 519 */
+/* 516 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33378,11 +33326,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _BrowserHistory = __webpack_require__(520);
+	var _BrowserHistory = __webpack_require__(517);
 	
 	var _BrowserHistory2 = _interopRequireDefault(_BrowserHistory);
 	
-	var _StaticRouter = __webpack_require__(531);
+	var _StaticRouter = __webpack_require__(527);
 	
 	var _StaticRouter2 = _interopRequireDefault(_StaticRouter);
 	
@@ -33427,7 +33375,7 @@
 	exports.default = BrowserRouter;
 
 /***/ },
-/* 520 */
+/* 517 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33438,11 +33386,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _createBrowserHistory = __webpack_require__(521);
+	var _createBrowserHistory = __webpack_require__(518);
 	
 	var _createBrowserHistory2 = _interopRequireDefault(_createBrowserHistory);
 	
-	var _History = __webpack_require__(530);
+	var _History = __webpack_require__(526);
 	
 	var _History2 = _interopRequireDefault(_History);
 	
@@ -33473,7 +33421,7 @@
 	exports.default = BrowserHistory;
 
 /***/ },
-/* 521 */
+/* 518 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -33484,25 +33432,25 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _warning = __webpack_require__(522);
+	var _warning = __webpack_require__(519);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	var _invariant = __webpack_require__(523);
+	var _invariant = __webpack_require__(492);
 	
 	var _invariant2 = _interopRequireDefault(_invariant);
 	
-	var _LocationUtils = __webpack_require__(524);
+	var _LocationUtils = __webpack_require__(520);
 	
-	var _PathUtils = __webpack_require__(526);
+	var _PathUtils = __webpack_require__(522);
 	
-	var _createTransitionManager = __webpack_require__(527);
+	var _createTransitionManager = __webpack_require__(523);
 	
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 	
-	var _ExecutionEnvironment = __webpack_require__(528);
+	var _ExecutionEnvironment = __webpack_require__(524);
 	
-	var _DOMUtils = __webpack_require__(529);
+	var _DOMUtils = __webpack_require__(525);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -33786,7 +33734,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 522 */
+/* 519 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -33853,65 +33801,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 523 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
-	
-	var invariant = function(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  }
-	
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error(
-	        'Minified exception occurred; use the non-minified dev environment ' +
-	        'for the full error message and additional helpful warnings.'
-	      );
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error(
-	        format.replace(/%s/g, function() { return args[argIndex++]; })
-	      );
-	      error.name = 'Invariant Violation';
-	    }
-	
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
-	  }
-	};
-	
-	module.exports = invariant;
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
-
-/***/ },
-/* 524 */
+/* 520 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33923,11 +33813,11 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _resolvePathname = __webpack_require__(525);
+	var _resolvePathname = __webpack_require__(521);
 	
 	var _resolvePathname2 = _interopRequireDefault(_resolvePathname);
 	
-	var _PathUtils = __webpack_require__(526);
+	var _PathUtils = __webpack_require__(522);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34005,7 +33895,7 @@
 	};
 
 /***/ },
-/* 525 */
+/* 521 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34080,7 +33970,7 @@
 	module.exports = resolvePathname;
 
 /***/ },
-/* 526 */
+/* 522 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34138,14 +34028,14 @@
 	};
 
 /***/ },
-/* 527 */
+/* 523 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
 	exports.__esModule = true;
 	
-	var _warning = __webpack_require__(522);
+	var _warning = __webpack_require__(519);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -34222,7 +34112,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 528 */
+/* 524 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34231,7 +34121,7 @@
 	var canUseDOM = exports.canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 
 /***/ },
-/* 529 */
+/* 525 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34280,7 +34170,7 @@
 	};
 
 /***/ },
-/* 530 */
+/* 526 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34291,7 +34181,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(517);
+	var _PropTypes = __webpack_require__(514);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34388,7 +34278,7 @@
 	exports.default = History;
 
 /***/ },
-/* 531 */
+/* 527 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34399,15 +34289,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _queryString = __webpack_require__(532);
+	var _queryString = __webpack_require__(528);
 	
-	var _LocationUtils = __webpack_require__(535);
+	var _LocationUtils = __webpack_require__(531);
 	
-	var _MatchProvider = __webpack_require__(511);
+	var _MatchProvider = __webpack_require__(508);
 	
 	var _MatchProvider2 = _interopRequireDefault(_MatchProvider);
 	
-	var _PropTypes = __webpack_require__(509);
+	var _PropTypes = __webpack_require__(506);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34518,12 +34408,12 @@
 	exports.default = StaticRouter;
 
 /***/ },
-/* 532 */
+/* 528 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var strictUriEncode = __webpack_require__(533);
-	var objectAssign = __webpack_require__(534);
+	var strictUriEncode = __webpack_require__(529);
+	var objectAssign = __webpack_require__(530);
 	
 	function encode(value, opts) {
 		if (opts.encode) {
@@ -34622,7 +34512,7 @@
 
 
 /***/ },
-/* 533 */
+/* 529 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34634,7 +34524,7 @@
 
 
 /***/ },
-/* 534 */
+/* 530 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34723,7 +34613,7 @@
 
 
 /***/ },
-/* 535 */
+/* 531 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34733,7 +34623,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _PathUtils = __webpack_require__(526);
+	var _PathUtils = __webpack_require__(522);
 	
 	var createRouterLocation = function createRouterLocation(input, parseQuery, stringifyQuery) {
 	  if (typeof input === 'string') {
@@ -34762,7 +34652,7 @@
 	exports.createRouterPath = createRouterPath;
 
 /***/ },
-/* 536 */
+/* 532 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34775,11 +34665,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _HashHistory = __webpack_require__(537);
+	var _HashHistory = __webpack_require__(533);
 	
 	var _HashHistory2 = _interopRequireDefault(_HashHistory);
 	
-	var _StaticRouter = __webpack_require__(531);
+	var _StaticRouter = __webpack_require__(527);
 	
 	var _StaticRouter2 = _interopRequireDefault(_StaticRouter);
 	
@@ -34824,7 +34714,7 @@
 	exports.default = HashRouter;
 
 /***/ },
-/* 537 */
+/* 533 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34835,11 +34725,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _createHashHistory = __webpack_require__(538);
+	var _createHashHistory = __webpack_require__(534);
 	
 	var _createHashHistory2 = _interopRequireDefault(_createHashHistory);
 	
-	var _History = __webpack_require__(530);
+	var _History = __webpack_require__(526);
 	
 	var _History2 = _interopRequireDefault(_History);
 	
@@ -34869,7 +34759,7 @@
 	exports.default = HashHistory;
 
 /***/ },
-/* 538 */
+/* 534 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -34878,25 +34768,25 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _warning = __webpack_require__(522);
+	var _warning = __webpack_require__(519);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	var _invariant = __webpack_require__(523);
+	var _invariant = __webpack_require__(492);
 	
 	var _invariant2 = _interopRequireDefault(_invariant);
 	
-	var _LocationUtils = __webpack_require__(524);
+	var _LocationUtils = __webpack_require__(520);
 	
-	var _PathUtils = __webpack_require__(526);
+	var _PathUtils = __webpack_require__(522);
 	
-	var _createTransitionManager = __webpack_require__(527);
+	var _createTransitionManager = __webpack_require__(523);
 	
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 	
-	var _ExecutionEnvironment = __webpack_require__(528);
+	var _ExecutionEnvironment = __webpack_require__(524);
 	
-	var _DOMUtils = __webpack_require__(529);
+	var _DOMUtils = __webpack_require__(525);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -35195,7 +35085,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 539 */
+/* 535 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35208,11 +35098,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _MemoryHistory = __webpack_require__(540);
+	var _MemoryHistory = __webpack_require__(536);
 	
 	var _MemoryHistory2 = _interopRequireDefault(_MemoryHistory);
 	
-	var _StaticRouter = __webpack_require__(531);
+	var _StaticRouter = __webpack_require__(527);
 	
 	var _StaticRouter2 = _interopRequireDefault(_StaticRouter);
 	
@@ -35262,7 +35152,7 @@
 	exports.default = MemoryRouter;
 
 /***/ },
-/* 540 */
+/* 536 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35273,11 +35163,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _createMemoryHistory = __webpack_require__(541);
+	var _createMemoryHistory = __webpack_require__(537);
 	
 	var _createMemoryHistory2 = _interopRequireDefault(_createMemoryHistory);
 	
-	var _History = __webpack_require__(530);
+	var _History = __webpack_require__(526);
 	
 	var _History2 = _interopRequireDefault(_History);
 	
@@ -35308,7 +35198,7 @@
 	exports.default = MemoryHistory;
 
 /***/ },
-/* 541 */
+/* 537 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -35319,13 +35209,13 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _warning = __webpack_require__(522);
+	var _warning = __webpack_require__(519);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	var _LocationUtils = __webpack_require__(524);
+	var _LocationUtils = __webpack_require__(520);
 	
-	var _createTransitionManager = __webpack_require__(527);
+	var _createTransitionManager = __webpack_require__(523);
 	
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 	
@@ -35479,7 +35369,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 542 */
+/* 538 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35492,7 +35382,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _StaticRouter = __webpack_require__(531);
+	var _StaticRouter = __webpack_require__(527);
 	
 	var _StaticRouter2 = _interopRequireDefault(_StaticRouter);
 	
@@ -35553,7 +35443,7 @@
 	exports.default = ServerRouter;
 
 /***/ },
-/* 543 */
+/* 539 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35614,7 +35504,7 @@
 	exports.default = createServerRenderContext;
 
 /***/ },
-/* 544 */
+/* 540 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35627,9 +35517,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(507);
+	var _reactRouter = __webpack_require__(504);
 	
-	var _SignIn = __webpack_require__(545);
+	var _SignIn = __webpack_require__(541);
 	
 	var _SignIn2 = _interopRequireDefault(_SignIn);
 	
@@ -35647,7 +35537,7 @@
 	        _reactRouter.Link,
 	        {
 	          to: '/',
-	          className: 'header' },
+	          className: 'MainTitle' },
 	        'CO Kid Hikes'
 	      )
 	    ),
@@ -35685,7 +35575,7 @@
 	exports.default = Header;
 
 /***/ },
-/* 545 */
+/* 541 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35705,7 +35595,7 @@
 	
 	var _reactRedux = __webpack_require__(469);
 	
-	var _auth = __webpack_require__(546);
+	var _auth = __webpack_require__(503);
 	
 	var actions = _interopRequireWildcard(_auth);
 	
@@ -35768,7 +35658,7 @@
 	          _react2.default.createElement(
 	            'button',
 	            {
-	              // disabled={(status === 'AWATING_AUTH_RESPONSE')}
+	              disabled: status === 'AWATING_AUTH_RESPONSE',
 	              onClick: function onClick(e) {
 	                return logIn();
 	              }
@@ -35794,87 +35684,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SignIn);
 
 /***/ },
-/* 546 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.logOut = exports.logIn = undefined;
-	
-	var _firebase = __webpack_require__(497);
-	
-	var _firebase2 = _interopRequireDefault(_firebase);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var firebaseApp = _firebase2.default.initializeApp({
-	  apiKey: "AIzaSyAjWOGb8Tl-WWTxDRtRDud4ot4ojzVuGFU",
-	  authDomain: "co-kid-hikes.firebaseapp.com",
-	  databaseURL: "https://co-kid-hikes.firebaseio.com",
-	  storageBucket: "co-kid-hikes.appspot.com",
-	  messagingSenderId: "548128761061"
-	});
-	
-	var google = new _firebase2.default.auth.GoogleAuthProvider();
-	
-	function startListeningToAuth() {
-	  return function (dispatch, getState) {
-	    _firebase2.default.auth().onAuthStateChanged(function (authData) {
-	      if (authData) {
-	        dispatch({
-	          type: 'LOGIN',
-	          uid: authData.uid,
-	          username: authData.displayName
-	        });
-	      } else {
-	        if (getState().auth.status !== 'ANONYMOUS') {
-	          dispatch({
-	            type: 'LOGOUT'
-	          });
-	        }
-	      }
-	    });
-	  };
-	}
-	
-	function logIn() {
-	  return function (dispatch) {
-	    dispatch({
-	      type: 'ATTEMPTING_LOGIN'
-	    });
-	
-	    _firebase2.default.auth().signInWithPopup(google).then(function (result) {
-	      dispatch({
-	        type: 'LOGIN',
-	        uid: result.user.uid,
-	        username: result.user.displayName
-	      });
-	    }).catch(function (error) {
-	      console.log('Error logging in: ', error);
-	    });
-	  };
-	}
-	
-	function logOut() {
-	  return function (dispatch) {
-	    dispatch({
-	      type: 'LOGOUT'
-	    });
-	
-	    _firebase2.default.auth.signOut().then(function () {
-	      console.log('Sign out successful!');
-	    });
-	  };
-	}
-	
-	exports.logIn = logIn;
-	exports.logOut = logOut;
-
-/***/ },
-/* 547 */
+/* 542 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35885,15 +35695,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Header = __webpack_require__(544);
+	var _Header = __webpack_require__(540);
 	
 	var _Header2 = _interopRequireDefault(_Header);
 	
-	var _Dashboard = __webpack_require__(548);
+	var _Dashboard = __webpack_require__(543);
 	
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 	
-	var _Sidebar = __webpack_require__(551);
+	var _Sidebar = __webpack_require__(546);
 	
 	var _Sidebar2 = _interopRequireDefault(_Sidebar);
 	
@@ -35946,7 +35756,7 @@
 	module.exports = App;
 
 /***/ },
-/* 548 */
+/* 543 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35961,11 +35771,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ZipSearch = __webpack_require__(549);
+	var _ZipSearch = __webpack_require__(544);
 	
 	var _ZipSearch2 = _interopRequireDefault(_ZipSearch);
 	
-	var _ForecastApi = __webpack_require__(550);
+	var _ForecastApi = __webpack_require__(545);
 	
 	var _ForecastApi2 = _interopRequireDefault(_ForecastApi);
 	
@@ -36015,7 +35825,7 @@
 	exports.default = Dashboard;
 
 /***/ },
-/* 549 */
+/* 544 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36077,7 +35887,7 @@
 	exports.default = ZipSearch;
 
 /***/ },
-/* 550 */
+/* 545 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36133,7 +35943,7 @@
 	exports.default = ForecastApi;
 
 /***/ },
-/* 551 */
+/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36186,7 +35996,7 @@
 	exports.default = Sidebar;
 
 /***/ },
-/* 552 */
+/* 547 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36197,9 +36007,9 @@
 	
 	var _reactRedux = __webpack_require__(469);
 	
-	var _actions = __webpack_require__(553);
+	var _actions = __webpack_require__(548);
 	
-	var _NewTrailForm = __webpack_require__(554);
+	var _NewTrailForm = __webpack_require__(549);
 	
 	var _NewTrailForm2 = _interopRequireDefault(_NewTrailForm);
 	
@@ -36216,23 +36026,55 @@
 	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(_NewTrailForm2.default);
 
 /***/ },
-/* 553 */
-/***/ function(module, exports) {
+/* 548 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var createTrail = exports.createTrail = function createTrail(payload) {
-	  return {
-	    type: 'CREATE_TRAIL',
-	    payload: payload
+	exports.createTrail = undefined;
+	
+	var _firebase = __webpack_require__(493);
+	
+	var _firebase2 = _interopRequireDefault(_firebase);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var firebaseTrails = _firebase2.default.database().ref('trails');
+	
+	// export const createTrail = (payload) => {
+	//   return {
+	//     type: 'CREATE_TRAIL',
+	//     payload
+	//   };
+	// };
+	
+	var createTrail = exports.createTrail = function createTrail(trailData) {
+	  return function (dispatch) {
+	
+	    // we need to create a new unique key to store our trail
+	    // data under. this will tell firebase to put this particular
+	    // trail that we're saving under trails/<unique-key>
+	    var newTrailKey = firebaseTrails.push().key;
+	
+	    // access the new "table row" we created under `trails/<unique-key`
+	    // and set the data for it
+	    firebaseTrails.child(newTrailKey).set(trailData).then(function () {
+	      // when the write to the database was successful, finally dispatch our action
+	      dispatch({
+	        type: 'CREATE_NEW_TRAIL',
+	        trail: trailData
+	      });
+	    }).catch(function (error) {
+	      console.log("Error saving trail: ", error);
+	    });
 	  };
 	};
 
 /***/ },
-/* 554 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36276,8 +36118,8 @@
 	        elevation: this.storeElevation.value,
 	        notes: this.storeNotes.value
 	      };
-	      console.log('in component ' + payload);
 	      this.props.handleSubmit(payload);
+	      console.log('in component ' + payload);
 	    }
 	  }, {
 	    key: 'render',
@@ -36293,22 +36135,23 @@
 	          'Create a New Trail'
 	        ),
 	        _react2.default.createElement(
-	          'section',
-	          { className: 'NewTrailForm' },
+	          'form',
+	          { className: 'InputArea',
+	            onSubmit: function onSubmit(e) {
+	              e.preventDefault();
+	              _this2.sendPayload();
+	            } },
 	          _react2.default.createElement(
-	            'form',
-	            { className: 'InputArea',
-	              onSubmit: function onSubmit(e) {
-	                e.preventDefault();
-	                _this2.sendPayload();
-	              } },
+	            'section',
+	            { className: 'NewTrailForm' },
 	            _react2.default.createElement(
 	              'label',
-	              null,
+	              { className: 'NewTrailLabel' },
 	              'Title',
 	              _react2.default.createElement('input', {
 	                type: 'text',
 	                name: 'title',
+	                className: 'NewTrailField',
 	                placeholder: 'Enter title',
 	                ref: function ref(input) {
 	                  return _this2.storeTitle = input;
@@ -36317,11 +36160,12 @@
 	            ),
 	            _react2.default.createElement(
 	              'label',
-	              null,
+	              { className: 'NewTrailLabel' },
 	              'Description',
 	              _react2.default.createElement('textarea', {
 	                type: 'text',
 	                name: 'description',
+	                className: 'NewTrailField',
 	                placeholder: 'Enter trail description',
 	                ref: function ref(input) {
 	                  return _this2.storeDescription = input;
@@ -36330,11 +36174,12 @@
 	            ),
 	            _react2.default.createElement(
 	              'label',
-	              null,
+	              { className: 'NewTrailLabel' },
 	              'Distance',
 	              _react2.default.createElement('input', {
 	                type: 'number',
 	                name: 'distance',
+	                className: 'NewTrailField',
 	                placeholder: 'Enter distance',
 	                ref: function ref(input) {
 	                  return _this2.storeDistance = input;
@@ -36343,11 +36188,12 @@
 	            ),
 	            _react2.default.createElement(
 	              'label',
-	              null,
+	              { className: 'NewTrailLabel' },
 	              'Elevation',
 	              _react2.default.createElement('input', {
 	                type: 'text',
 	                name: 'elevation',
+	                className: 'NewTrailField',
 	                placeholder: 'Enter beginning/end elevation',
 	                ref: function ref(input) {
 	                  return _this2.storeElevation = input;
@@ -36356,11 +36202,12 @@
 	            ),
 	            _react2.default.createElement(
 	              'label',
-	              null,
+	              { className: 'NewTrailLabel' },
 	              'Notes',
 	              _react2.default.createElement('textarea', {
 	                type: 'text',
 	                name: 'notes',
+	                className: 'NewTrailField',
 	                placeholder: 'Enter notes about trail',
 	                ref: function ref(input) {
 	                  return _this2.storeNotes = input;
@@ -36394,7 +36241,7 @@
 	exports.default = NewTrailForm;
 
 /***/ },
-/* 555 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36407,7 +36254,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _TrailCard = __webpack_require__(556);
+	var _TrailCard = __webpack_require__(551);
 	
 	var _TrailCard2 = _interopRequireDefault(_TrailCard);
 	
@@ -36420,7 +36267,7 @@
 	exports.default = TrailList;
 
 /***/ },
-/* 556 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36460,7 +36307,7 @@
 	exports.default = TrailCard;
 
 /***/ },
-/* 557 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36490,16 +36337,16 @@
 	exports.default = NoMatch;
 
 /***/ },
-/* 558 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(559);
+	var content = __webpack_require__(554);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(561)(content, {});
+	var update = __webpack_require__(556)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -36516,21 +36363,21 @@
 	}
 
 /***/ },
-/* 559 */
+/* 554 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(560)();
+	exports = module.exports = __webpack_require__(555)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding-left: 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderSearchInput {\n  background: #FFFFFF;\n  border-radius: 4px;\n  margin-left: auto; }\n\n.NewIcon {\n  color: white;\n  margin: 0 10px; }\n\n.ListIcon {\n  color: white;\n  margin-right: 10px; }\n\n.DashboardView {\n  display: flex; }\n\n.Dashboard {\n  flex: 3;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n\n.NatureQuote {\n  margin: 10px 0; }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  height: 90vh;\n  text-align: center; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 15px 0;\n  font-size: 2.5em; }\n\n.ZipSearch {\n  text-align: center;\n  margin-right: 50px; }\n\n.NewTrailForm {\n  display: flex; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 10px 0 10px 10px; }\n\n.InputArea {\n  border: 1px dashed grey;\n  flex: 1;\n  flex-direction: column;\n  margin: 10px 0 0 10px; }\n\nlabel {\n  display: flex;\n  margin-bottom: 10px; }\n\ninput,\ntextarea {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px; }\n\n.SaveButton {\n  height: 20px;\n  width: 50px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63; }\n\n.MapRank {\n  border: 1px dashed grey;\n  flex: 2;\n  margin: 10px 0 0 10px; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding-left: 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderSearchInput {\n  background: #FFFFFF;\n  border-radius: 4px;\n  margin-left: auto; }\n\n.NewIcon {\n  color: white;\n  margin: 0 10px; }\n\n.ListIcon {\n  color: white;\n  margin-right: 10px; }\n\n.DashboardView {\n  display: flex; }\n\n.Dashboard {\n  flex: 3;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n\n.NatureQuote {\n  margin: 10px 0; }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  height: 90vh;\n  text-align: center; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 15px 0;\n  font-size: 2.5em; }\n\n.ZipSearch {\n  text-align: center;\n  margin-right: 50px; }\n\n.NewTrailForm {\n  display: flex; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 10px 0 10px 10px; }\n\n.InputArea {\n  border: 1px dashed grey;\n  flex: 1;\n  flex-direction: column;\n  margin: 10px 0 0 10px; }\n\nlabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1em; }\n\ninput,\ntextarea {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1em; }\n\n.NewTrailField {\n  float: right; }\n\n.SaveButton {\n  height: 30px;\n  width: 60px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .SaveButton:hover {\n    border: 1px solid #A2C11C; }\n\n.MapRank {\n  border: 1px dashed grey;\n  flex: 2; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 560 */
+/* 555 */
 /***/ function(module, exports) {
 
 	/*
@@ -36586,7 +36433,7 @@
 
 
 /***/ },
-/* 561 */
+/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
