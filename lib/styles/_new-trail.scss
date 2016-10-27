@@ -24,25 +24,27 @@
 .NewTrailLabel {
   display: flex;
   margin-bottom: 10px;
-  // font-size: 1em;
+  font-size: 1.5em;
 }
 
 .NewTrailField {
   border: none;
   border-bottom: 2px solid #2C5D63;
   margin-left: 5px;
-  // font-size: 1em;
+  font-size: 1.125em;
   width: 300px;
 }
 
 .NewTrailLabel,
 .NewTrailField {
   float: right;
-  font-size: 1.25em;
+  // font-size: 1.25em;
   margin-right: 50px;
 }
 
 .SaveButton {
+  float: right;
+  margin-right: 175px;
   height: 30px;
   width: 60px;
   border-radius: 5px;
@@ -56,7 +58,7 @@
 }
 
 .MapRank {
-  background: grey;
+  border: 1px solid grey;
   flex: 1.5;
   // margin: 10px 0 0 10px;
 
