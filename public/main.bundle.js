@@ -8232,7 +8232,7 @@
 	  { store: _store2.default },
 	  _react2.default.createElement(
 	    _reactRouter.BrowserRouter,
-	    { basename: '/public' },
+	    null,
 	    _react2.default.createElement(
 	      'div',
 	      null,
@@ -31897,63 +31897,65 @@
 
 /***/ },
 /* 504 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = trailsReducer;
-	
-	var _initialState = __webpack_require__(503);
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
-	function trailsReducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _initialState.initialState.trails;
+	// import { initialState } from '../initialState';
+	//
+	// export default function trailsReducer(state = initialState.trails, action) {
+	//   switch(action.type) {
+	//     case 'RECEIVE_ALL_TRAILS':
+	//       return {
+	//         data: action.trails
+	//       };
+	//
+	//     case 'CREATE_NEW_TRAIL':
+	//       return {
+	//         data: [...state.data || [], action.trail]
+	//       };
+	//   }
+	// }
+	
+	var trail = function trail() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments[1];
 	
 	  switch (action.type) {
-	    case 'RECEIVE_ALL_TRAILS':
+	    case 'CREATE_TRAIL':
 	      return {
-	        data: action.trails
+	        title: action.payload.title,
+	        description: action.payload.description,
+	        distance: action.payload.distance,
+	        elevation: action.payload.elevation,
+	        notes: action.payload.notes
 	      };
 	
-	    case 'CREATE_NEW_TRAIL':
-	      return {
-	        data: [].concat(_toConsumableArray(state.data || []), [action.trail])
-	      };
+	    default:
+	      return state;
 	  }
-	}
+	};
 	
-	// const trail = (state = {}, action) => {
-	//   switch (action.type) {
-	//     case 'CREATE_TRAIL':
-	//       return {
-	//         title: action.payload.title,
-	//         description: action.payload.description,
-	//         distance: action.payload.distance,
-	//         elevation: action.payload.elevation,
-	//         notes: action.payload.notes,
-	//       };
-	//
-	//     default:
-	//       return state;
-	//   }
-	// };
-	//
-	// const trails = (state = [], action) => {
-	//   console.log('in trails reducer: ' + action.type);
-	//   switch (action.type) {
-	//     case 'CREATE_TRAIL':
-	//       return [...state, trail(undefined, action)];
-	//     default:
-	//       return state;
-	//   }
-	// };
-	//
-	// export default trails;
+	var trails = function trails() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  var action = arguments[1];
+	
+	  console.log('in trails reducer: ' + action.type);
+	  switch (action.type) {
+	    case 'CREATE_TRAIL':
+	      return [].concat(_toConsumableArray(state), [trail(undefined, action)]);
+	    default:
+	      return state;
+	  }
+	};
+	
+	exports.default = trails;
 
 /***/ },
 /* 505 */
@@ -36090,10 +36092,16 @@
 	      return _react2.default.createElement(
 	        "aside",
 	        { className: "SideBar" },
+	        _react2.default.createElement("img", { src: "../public/assets/mountains-icon.png", alt: "landscape", className: "MtnIcon" }),
 	        _react2.default.createElement(
 	          "h2",
 	          { className: "SideTitle" },
 	          "Favorite Hikes"
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          { className: "FavoriteTitle" },
+	          "trailData.title"
 	        )
 	      );
 	    }
@@ -36374,7 +36382,13 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var TrailList = function TrailList() {
-	  return _react2.default.createElement(_TrailCard2.default, null);
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'TrailList' },
+	    _react2.default.createElement(_TrailCard2.default, null),
+	    _react2.default.createElement(_TrailCard2.default, null),
+	    _react2.default.createElement(_TrailCard2.default, null)
+	  );
 	};
 	
 	exports.default = TrailList;
@@ -36399,7 +36413,7 @@
 	  return _react2.default.createElement(
 	    "section",
 	    { className: "TrailCard" },
-	    _react2.default.createElement("img", { src: "", alt: "landscape", className: "TrailImg" }),
+	    _react2.default.createElement("img", { src: "../public/assets/mountains-card.png", alt: "landscape", className: "TrailImg" }),
 	    _react2.default.createElement(
 	      "h1",
 	      { className: "CardTitle" },
@@ -36484,7 +36498,7 @@
 	
 	
 	// module
-	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding-left: 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderSearchInput {\n  background: #FFFFFF;\n  border-radius: 4px;\n  margin-left: auto; }\n\n.NewIcon {\n  color: white;\n  margin: 0 10px; }\n\n.ListIcon {\n  color: white;\n  margin-right: 10px; }\n\n.DashboardView {\n  display: flex; }\n\n.Dashboard {\n  flex: 3;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n\n.NatureQuote {\n  margin: 10px 0; }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  height: 90vh;\n  text-align: center; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 15px 0;\n  font-size: 2.5em; }\n\n.ZipSearch {\n  text-align: center;\n  margin-right: 50px; }\n\n.NewTrailForm {\n  display: flex; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 10px 0 10px 10px; }\n\n.InputArea {\n  border: 1px dashed grey;\n  flex: 1;\n  flex-direction: column;\n  margin: 10px 0 0 10px; }\n\nlabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1em; }\n\ninput,\ntextarea {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1em; }\n\n.NewTrailField {\n  float: right; }\n\n.SaveButton {\n  height: 30px;\n  width: 60px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .SaveButton:hover {\n    border: 1px solid #A2C11C; }\n\n.MapRank {\n  border: 1px dashed grey;\n  flex: 2; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding: 5px 0 5px 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderSearchInput {\n  background: #FFFFFF;\n  border-radius: 4px;\n  margin-left: auto; }\n\n.NewIcon {\n  color: white;\n  margin: 0 10px; }\n\n.ListIcon {\n  color: white;\n  margin-right: 10px; }\n\n.DashboardView {\n  display: flex; }\n\n.Dashboard {\n  flex: 3;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n\n.NatureQuote {\n  margin: 10px 0; }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  height: 90vh;\n  text-align: center; }\n\n.MtnIcon {\n  height: 40px;\n  width: 40px;\n  margin-top: 15px; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 20px 0;\n  font-size: 2.5em; }\n\n.FavoriteTitle {\n  color: white;\n  font-size: 1.5em; }\n\n.ZipSearch {\n  text-align: center;\n  margin-right: 50px; }\n\n.NewTrailForm {\n  display: flex; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 10px 0 10px 10px; }\n\n.InputArea {\n  border: 1px dashed grey;\n  flex: 1;\n  flex-direction: column;\n  margin: 10px 0 0 10px; }\n\nlabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1em; }\n\ninput,\ntextarea {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1em; }\n\n.NewTrailField {\n  float: right; }\n\n.SaveButton {\n  height: 30px;\n  width: 60px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .SaveButton:hover {\n    border: 1px solid #A2C11C; }\n\n.MapRank {\n  border: 1px dashed grey;\n  flex: 2; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px; }\n\n.TrailList {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  margin: 30px 50px 0 50px; }\n\n.TrailCard {\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #0C273D;\n  background-color: white;\n  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);\n  height: 300px;\n  width: 350px;\n  margin-bottom: 40px; }\n  .TrailCard:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n\n.CardLink {\n  text-decoration: none;\n  font-weight: bold;\n  color: black; }\n\n.TrailImg {\n  height: 170px;\n  overflow: hidden; }\n\nimg {\n  opacity: 1;\n  width: 100%;\n  background: #2C5E2E;\n  height: 170px; }\n\n.CardTitle {\n  line-height: 1.5em;\n  font-size: 125%;\n  text-align: left;\n  padding-left: 5px;\n  margin-top: 5px; }\n\n.CardDesc {\n  font-size: 0.9em;\n  line-height: 1.5em;\n  padding: 0 5px 5px 5px; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
 	
 	// exports
 
