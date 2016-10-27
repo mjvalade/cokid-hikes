@@ -1,37 +1,45 @@
-.NewTrailForm {
+.InputArea {
   display: flex;
+  align-items: flex-start;
+  width: 95%;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.NewTrailForm {
+  // background: #c1e9ff;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+
 }
 
 .NewTitle {
   color: #A2C11C;
   font-family: $header-font;
   font-size: 50px;
-  margin: 10px 0 10px 10px;
+  margin: 20px 0 10px 10px;
 }
 
-.InputArea {
-  border: 1px dashed grey;
-  flex: 1;
-  flex-direction: column;
-  margin: 10px 0 0 10px;
-}
-
-label {
+.NewTrailLabel {
   display: flex;
   margin-bottom: 10px;
-  font-size: 1em;
-}
-
-input,
-textarea {
-  border: none;
-  border-bottom: 2px solid #2C5D63;
-  margin-left: 5px;
-  font-size: 1em;
+  // font-size: 1em;
 }
 
 .NewTrailField {
+  border: none;
+  border-bottom: 2px solid #2C5D63;
+  margin-left: 5px;
+  // font-size: 1em;
+  width: 300px;
+}
+
+.NewTrailLabel,
+.NewTrailField {
   float: right;
+  font-size: 1.25em;
+  margin-right: 50px;
 }
 
 .SaveButton {
@@ -48,8 +56,8 @@ textarea {
 }
 
 .MapRank {
-  border: 1px dashed grey;
-  flex: 2;
+  background: grey;
+  flex: 1.5;
   // margin: 10px 0 0 10px;
 
 }
@@ -58,4 +66,5 @@ textarea {
   margin-top: 20px;
   height: 400px;
   width: 400px;
+  border: 1px solid #2C5D63;
 }
