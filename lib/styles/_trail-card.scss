@@ -1,0 +1,60 @@
+
+
+.TrailList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 30px 50px 0 50px;
+  // margin-left: 50px;
+  // margin-right: 50px;
+}
+
+.TrailCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #0C273D;
+  background-color: white;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  height: 300px;
+  width: 350px;
+  margin-bottom: 40px;
+  &:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  }
+}
+
+.CardLink {
+  text-decoration: none;
+  font-weight: bold;
+  color: black;
+}
+
+.TrailImg {
+  height: 170px;
+  overflow: hidden;
+}
+
+img {
+  opacity: 1;
+  width: 100%;
+  background: #2C5E2E;
+  height: 170px;
+}
+
+.CardTitle {
+  line-height: 1.5em;
+  font-size: 125%;
+  text-align: left;
+  padding-left: 5px;
+  margin-top: 5px;
+}
+
+.CardMiles {
+
+}
+
+.CardDesc {
+    font-size: 0.9em;
+    line-height: 1.5em;
+    padding: 0 5px 5px 5px;
+}
