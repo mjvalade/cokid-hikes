@@ -40,15 +40,21 @@
 }
 
 .ZipSearch {
-  background: red;
-  float: left;
+  display: inline-flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  // float: left;
   // flex: 1;
-  height: 100%;
-  text-align: center;
+  // height: 100%;
+  // text-align: center;
+}
+
+.ZipInputs {
+  margin: 0 5px 0 5px;
 }
 
 .DashMain {
-  border: 1px dashed grey;
+  // border: 1px dashed grey;
   // flex: 3;
 }
 
