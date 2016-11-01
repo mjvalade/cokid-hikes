@@ -1,32 +1,69 @@
 .DashboardView {
   display: flex;
+  flex-flow: row wrap;
 }
 
 .Dashboard {
-  flex: 3;
+  flex: none;
   margin: auto;
+  margin-top: 5px;
   text-align: center;
+  @media screen and (min-width: 900px) {
+    flex: 3;
+    height: 80vh;
+  }
+}
+
+.SideBar {
+  flex: 1;
+  background: #2C5D63;
+  // height: 90vh;
+  text-align: center;
+}
+
+.MtnIcon {
+  height: 40px;
+  width: 40px;
+  margin-top: 15px;
+}
+
+.SideTitle {
+  color: #A2C11C;
+  font-family: $header-font;
+  margin: 20px 0;
+  font-size: 2.5em;
+}
+
+.FavoriteTitle {
+  color: white;
+  font-size: 1.5em;
+}
+
+.ZipSearch {
+  background: red;
+  float: left;
+  // flex: 1;
+  height: 100%;
+  text-align: center;
+}
+
+.DashMain {
+  border: 1px dashed grey;
+  // flex: 3;
 }
 
 .NatureQuote {
   margin: 10px 0;
 }
 
-.SideBar {
-  flex: 1;
-  background: #2C5D63;
-  height: 500px;
-  text-align: center;
-}
-
-.SideTitle {
-  color: #A2C11C;
-  font-family: $header-font;
-  margin: 15px 0;
-  font-size: 2.5em;
-}
-
-.ZipSearch {
-  text-align: center;
-  margin-right: 50px;
+.Forecast {
+  background: turquoise;
+  float: right;
+  height: 100%;
+  // flex: 1;
+  .weatherApi {
+    background: white;
+    height: 200px;
+    width: 200px;
+  }
 }

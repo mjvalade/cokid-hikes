@@ -3,10 +3,11 @@
 @import '_header';
 @import '_dashboard';
 @import '_new-trail';
+@import '_trail-card';
 
-$primary-text-color: green;
+// $primary-text-color: green;
 
 body {
-  color: $primary-text-color;
+  // color: $primary-text-color;
   font-family: $main-font;
 }
