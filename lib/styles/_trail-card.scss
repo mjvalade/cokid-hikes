@@ -41,7 +41,13 @@ img {
   height: 170px;
 }
 
-.CardTitle {
+.TopContainer {
+  display: flex;
+}
+
+.CardTitle,
+.CardMiles {
+  display: inline-block;
   line-height: 1.5em;
   font-size: 125%;
   text-align: left;
@@ -50,8 +56,10 @@ img {
 }
 
 .CardMiles {
-
+  margin-left: auto;
+  padding-right: 5px;
 }
+
 
 .CardDesc {
     font-size: 0.9em;
