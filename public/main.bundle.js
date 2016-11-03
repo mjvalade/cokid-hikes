@@ -35834,7 +35834,8 @@
 	        _reactRouter.Link,
 	        {
 	          to: '/',
-	          className: 'MainTitle' },
+	          className: 'MainTitle'
+	        },
 	        'CO Kid Hikes'
 	      )
 	    ),
