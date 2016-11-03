@@ -36772,7 +36772,7 @@
 	      return _react2.default.createElement(
 	        'aside',
 	        { className: 'SideBar Aside Aside-1' },
-	        _react2.default.createElement('img', { src: '../public/assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
+	        _react2.default.createElement('img', { src: '../assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
 	        _react2.default.createElement(
 	          'h2',
 	          { className: 'SideTitle' },
@@ -53917,8 +53917,7 @@
 	        distance: this.storeDistance.value,
 	        elevation: this.storeElevation.value,
 	        notes: this.storeNotes.value,
-	        uid: Date.now(),
-	        latLong: this.storeLatLong.value
+	        uid: Date.now()
 	      };
 	      this.props.handleSubmit(payload);
 	      this.context.router.transitionTo('/TrailList');
