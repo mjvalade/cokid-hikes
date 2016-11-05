@@ -8213,15 +8213,15 @@
 	
 	var _NewTrailContainer2 = _interopRequireDefault(_NewTrailContainer);
 	
-	var _TrailListContainer = __webpack_require__(563);
+	var _TrailListContainer = __webpack_require__(564);
 	
 	var _TrailListContainer2 = _interopRequireDefault(_TrailListContainer);
 	
-	var _TrailDetailContainer = __webpack_require__(566);
+	var _TrailDetailContainer = __webpack_require__(567);
 	
 	var _TrailDetailContainer2 = _interopRequireDefault(_TrailDetailContainer);
 	
-	var _NoMatch = __webpack_require__(568);
+	var _NoMatch = __webpack_require__(569);
 	
 	var _NoMatch2 = _interopRequireDefault(_NoMatch);
 	
@@ -8229,7 +8229,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(569);
+	__webpack_require__(570);
 	
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRedux.Provider,
@@ -32054,7 +32054,6 @@
 	    data: [],
 	    selectedTrail: null
 	  }
-	
 	};
 
 /***/ },
@@ -32215,7 +32214,7 @@
 	      type: 'LOGOUT'
 	    });
 	
-	    _firebase2.default.auth.signOut().then(function () {
+	    _firebase2.default.auth().signOut().then(function () {
 	      console.log('Sign out successful!');
 	    });
 	  };
@@ -35797,11 +35796,17 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(299);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
 	var _reactRouter = __webpack_require__(513);
+	
+	var _redux = __webpack_require__(476);
+	
+	var _reactRedux = __webpack_require__(469);
 	
 	var _firebase = __webpack_require__(499);
 	
@@ -35819,52 +35824,69 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Header = function Header(props) {
-	  var auth = props.auth;
-	  var status = props.status;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	  return _react2.default.createElement(
-	    'header',
-	    { className: 'MainHeader' },
-	    _react2.default.createElement(
-	      'h1',
-	      { className: 'MainTitle' },
-	      _react2.default.createElement(
-	        _reactRouter.Link,
-	        {
-	          to: '/',
-	          className: 'MainTitle'
-	        },
-	        'CO Kid Hikes'
-	      )
-	    ),
-	    _react2.default.createElement(
-	      'section',
-	      { className: 'HeaderLinks' },
-	      _react2.default.createElement(
-	        _reactRouter.Link,
-	        {
-	          to: '/NewTrail',
-	          className: 'NewIcon',
-	          activeClassName: 'active'
-	        },
-	        'ADD NEW'
-	      ),
-	      _react2.default.createElement(
-	        _reactRouter.Link,
-	        {
-	          to: '/TrailList',
-	          className: 'ListIcon',
-	          activeClassName: 'active' },
-	        'TRAIL LIST'
-	      ),
-	      _react2.default.createElement(_SignIn2.default, null)
-	    )
-	  );
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Header = function (_Component) {
+	  _inherits(Header, _Component);
+	
+	  function Header() {
+	    _classCallCheck(this, Header);
+	
+	    return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
+	  }
+	
+	  _createClass(Header, [{
+	    key: 'render',
+	    value: function render() {
+	      console.log(this.props.status);
+	      return _react2.default.createElement(
+	        'header',
+	        { className: 'MainHeader' },
+	        _react2.default.createElement(
+	          'h1',
+	          { className: 'MainTitle' },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            {
+	              to: '/',
+	              className: 'MainTitle'
+	            },
+	            'CO Kid Hikes'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'section',
+	          { className: 'HeaderLinks' },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            {
+	              to: '/TrailList',
+	              className: 'ListIcon'
+	            },
+	            'TRAIL LIST'
+	          ),
+	          _react2.default.createElement(_SignIn2.default, null)
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Header;
+	}(_react.Component);
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return state.auth;
 	};
 	
-	exports.default = Header;
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return (0, _redux.bindActionCreators)(actions, dispatch);
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Header);
 
 /***/ },
 /* 550 */
@@ -35886,6 +35908,8 @@
 	var _redux = __webpack_require__(476);
 	
 	var _reactRedux = __webpack_require__(469);
+	
+	var _reactRouter = __webpack_require__(513);
 	
 	var _auth = __webpack_require__(512);
 	
@@ -35922,22 +35946,34 @@
 	
 	      if (status === 'LOGGED_IN') {
 	        return _react2.default.createElement(
-	          'section',
-	          { className: 'AuthWindow' },
+	          'div',
+	          null,
 	          _react2.default.createElement(
-	            'p',
-	            { className: 'User' },
-	            username
+	            _reactRouter.Link,
+	            {
+	              to: '/NewTrail',
+	              className: 'NewIcon'
+	            },
+	            'ADD NEW'
 	          ),
 	          _react2.default.createElement(
-	            'button',
-	            {
-	              onClick: function onClick(e) {
-	                return logOut();
+	            'section',
+	            { className: 'AuthWindow' },
+	            _react2.default.createElement(
+	              'p',
+	              { className: 'User' },
+	              username
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              {
+	                onClick: function onClick(e) {
+	                  return logOut();
+	                },
+	                className: 'AuthButton'
 	              },
-	              className: 'AuthButton'
-	            },
-	            'Log Out'
+	              'Log Out'
+	            )
 	          )
 	        );
 	      } else {
@@ -36056,7 +36092,7 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.props.fetchAllTrails();
+	      // this.props.fetchAllTrails();
 	      this.findUserCoords();
 	    }
 	  }, {
@@ -36659,37 +36695,60 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(299);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
 	// import ForecastApi from './ForecastApi';
 	
+	var Dashboard = function (_Component) {
+	  _inherits(Dashboard, _Component);
 	
-	var Dashboard = function Dashboard(props) {
-	  console.log(props);
-	  return _react2.default.createElement(
-	    "main",
-	    { className: "Dashboard" },
-	    _react2.default.createElement(
-	      "section",
-	      { className: "DashMain" },
-	      _react2.default.createElement(
-	        "p",
-	        { className: "NatureQuote" },
-	        "\u201CTeaching children about the natural world should be treated as one of the most important events in their lives.\u201D"
-	      ),
-	      _react2.default.createElement(
-	        "p",
-	        { className: "NatureQuote" },
-	        "\u2013 Thomas Berry"
-	      ),
-	      _react2.default.createElement("img", { src: "", alt: "map - all trails", className: "MainMap" })
-	    )
-	  );
-	};
+	  function Dashboard() {
+	    _classCallCheck(this, Dashboard);
+	
+	    return _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).apply(this, arguments));
+	  }
+	
+	  _createClass(Dashboard, [{
+	    key: "render",
+	    value: function render() {
+	
+	      return _react2.default.createElement(
+	        "main",
+	        { className: "Dashboard" },
+	        _react2.default.createElement(
+	          "section",
+	          { className: "DashMain" },
+	          _react2.default.createElement(
+	            "p",
+	            { className: "NatureQuote" },
+	            "\u201CTeaching children about the natural world should be treated as one of the most important events in their lives.\u201D"
+	          ),
+	          _react2.default.createElement(
+	            "p",
+	            { className: "NatureQuote" },
+	            "\u2013 Thomas Berry"
+	          ),
+	          _react2.default.createElement("img", { src: "", alt: "map - all trails", className: "MainMap" }),
+	          _react2.default.createElement("div", { id: "map", alt: "map - all trails", className: "MainMap" })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Dashboard;
+	}(_react.Component);
 	
 	exports.default = Dashboard;
 
@@ -36712,7 +36771,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return { trailsList: state.trails.data };
+	  return {
+	    auth: state.auth,
+	    trailsList: state.trails.data
+	  };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Sidebar2.default);
@@ -36764,15 +36826,19 @@
 	
 	  _createClass(Sidebar, [{
 	    key: 'render',
+	
+	
+	    // map through user's favorite trails and render those on page load, not all trails
+	
 	    value: function render() {
 	      var displayFavorites = (0, _lodash.map)(this.props.trailsList, function (trail) {
 	        return _react2.default.createElement(_Favorites2.default, _extends({ key: trail.uid }, trail));
 	      });
-	
+	      console.log(this.props.trailsList);
 	      return _react2.default.createElement(
 	        'aside',
 	        { className: 'SideBar Aside Aside-1' },
-	        _react2.default.createElement('img', { src: '../assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
+	        _react2.default.createElement('img', { src: '../public/assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
 	        _react2.default.createElement(
 	          'h2',
 	          { className: 'SideTitle' },
@@ -53830,6 +53896,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// convert to class like TrailCard
+	// reference grocery list redux repo for "starred grociers" array functionality
+	
 	var Favorites = function Favorites(trail) {
 	  return _react2.default.createElement(
 	    "section",
@@ -53890,6 +53959,10 @@
 	var _react2 = _interopRequireDefault(_react);
 	
 	var _reactRouter = __webpack_require__(513);
+	
+	var _Map = __webpack_require__(563);
+	
+	var _Map2 = _interopRequireDefault(_Map);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -54029,7 +54102,7 @@
 	              null,
 	              'Difficulty Ranking:'
 	            ),
-	            _react2.default.createElement('img', { src: '', alt: 'map', className: 'TrailheadMap' })
+	            _react2.default.createElement(_Map2.default, null)
 	          )
 	        )
 	      );
@@ -54055,6 +54128,110 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var DENVER_LATLONG = {
+	  lat: 39.754185,
+	  lng: -105.230484
+	};
+	
+	var Map = function (_Component) {
+	  _inherits(Map, _Component);
+	
+	  function Map() {
+	    _classCallCheck(this, Map);
+	
+	    return _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).call(this));
+	  }
+	
+	  _createClass(Map, [{
+	    key: 'render',
+	    value: function render() {
+	      var mapStyle = {
+	        width: 600,
+	        height: 400,
+	        border: '1px solid black'
+	      };
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { ref: 'map', style: mapStyle },
+	          'I should be a map!'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.setTrailheadMarker },
+	          'Set Trailhead'
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.map = this.createMap();
+	      this.marker = this.createMarker();
+	    }
+	  }, {
+	    key: 'createMap',
+	    value: function createMap() {
+	      var mapOptions = {
+	        center: DENVER_LATLONG,
+	        zoom: 10
+	      };
+	      return new google.maps.Map(this.refs.map, mapOptions);
+	    }
+	  }, {
+	    key: 'createMarker',
+	    value: function createMarker() {
+	      return new google.maps.Marker({
+	        position: { lat: 39.797920, lng: -105.493301 },
+	        map: this.map
+	      });
+	    }
+	  }, {
+	    key: 'setTrailheadMarker',
+	    value: function setTrailheadMarker() {
+	      console.log(this);
+	      // this.map.getPosition();
+	      // getPosition of marker = grab lat/long
+	    }
+	  }]);
+	
+	  return Map;
+	}(_react.Component);
+	
+	exports.default = Map;
+	// 
+	// ReactDOM.render(
+	//   <Map />,
+	//   document.getElementById('root')
+	// );
+
+/***/ },
+/* 564 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
 	var _reactRedux = __webpack_require__(469);
 	
 	var _actions = __webpack_require__(552);
@@ -54063,7 +54240,7 @@
 	
 	var _redux = __webpack_require__(476);
 	
-	var _TrailList = __webpack_require__(564);
+	var _TrailList = __webpack_require__(565);
 	
 	var _TrailList2 = _interopRequireDefault(_TrailList);
 	
@@ -54076,13 +54253,16 @@
 	};
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return { trailsList: state.trails.data };
+	  return {
+	    auth: state.auth,
+	    trailsList: state.trails.data
+	  };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TrailList2.default);
 
 /***/ },
-/* 564 */
+/* 565 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54105,7 +54285,7 @@
 	
 	var _lodash = __webpack_require__(559);
 	
-	var _TrailCard = __webpack_require__(565);
+	var _TrailCard = __webpack_require__(566);
 	
 	var _TrailCard2 = _interopRequireDefault(_TrailCard);
 	
@@ -54135,6 +54315,7 @@
 	        return _react2.default.createElement(_TrailCard2.default, _extends({ key: trail.uid }, trail, { setSelectedTrail: _this2.props.setSelectedTrail }));
 	      });
 	
+	      console.log(this.props);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'TrailList' },
@@ -54151,7 +54332,7 @@
 	exports.default = TrailList;
 
 /***/ },
-/* 565 */
+/* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -54237,7 +54418,7 @@
 	exports.default = TrailCard;
 
 /***/ },
-/* 566 */
+/* 567 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54250,7 +54431,7 @@
 	
 	var _redux = __webpack_require__(476);
 	
-	var _TrailDetails = __webpack_require__(567);
+	var _TrailDetails = __webpack_require__(568);
 	
 	var _TrailDetails2 = _interopRequireDefault(_TrailDetails);
 	
@@ -54272,7 +54453,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TrailDetails2.default);
 
 /***/ },
-/* 567 */
+/* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54385,7 +54566,7 @@
 	exports.default = TrailDetails;
 
 /***/ },
-/* 568 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -54415,16 +54596,16 @@
 	exports.default = NoMatch;
 
 /***/ },
-/* 569 */
+/* 570 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(570);
+	var content = __webpack_require__(571);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(572)(content, {});
+	var update = __webpack_require__(573)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -54441,10 +54622,10 @@
 	}
 
 /***/ },
-/* 570 */
+/* 571 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(571)();
+	exports = module.exports = __webpack_require__(572)();
 	// imports
 	
 	
@@ -54455,7 +54636,7 @@
 
 
 /***/ },
-/* 571 */
+/* 572 */
 /***/ function(module, exports) {
 
 	/*
@@ -54511,7 +54692,7 @@
 
 
 /***/ },
-/* 572 */
+/* 573 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
