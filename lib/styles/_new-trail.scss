@@ -1,24 +1,28 @@
-.InputArea {
-  display: flex;
-  align-items: flex-start;
-  width: 95%;
-  margin: auto;
-  margin-top: 20px;
-}
-
-.NewTrailForm {
-  // background: #c1e9ff;
-  flex: 1;
-  flex-direction: column;
-  align-items: flex-start;
-
-}
-
 .NewTitle {
   color: #A2C11C;
   font-family: $header-font;
   font-size: 50px;
-  margin: 20px 0 10px 10px;
+  margin: 20px 0 10px 20px;
+}
+
+.InputArea {
+  align-items: center;
+  display: flex;
+  width: 95%;
+  margin: auto;
+  margin-top: 40px;
+  flex-direction: column;
+  @media screen and (min-width: 1100px) {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+}
+
+.NewTrailForm {
+  // background: #c1e9ff;
+  // flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .NewTrailLabel {
@@ -55,13 +59,24 @@
   &:hover {
     border: 1px solid #A2C11C;
   }
+  @media screen and (min-width: 1100px) {
+    float: none;
+  }
 }
 
-.MapRank {
-  border: 1px solid grey;
-  flex: 1.5;
-  // margin: 10px 0 0 10px;
+.RightSide {
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid black;
+  padding-top: 20px;
+  @media screen and (min-width: 1100px) {
+    border: none;
+    padding-top: 0;
+  }
+}
 
+.Ranking {
+  display: inline-flex;
 }
 
 .TrailheadMap {
@@ -69,4 +84,15 @@
   height: 400px;
   width: 400px;
   border: 1px solid #2C5D63;
+}
+
+.MarkerButton {
+  background: #2C5D63;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1em;
+  margin: 5px 0 20px 0;
+  height: 30px;
+  width: 125px;
 }

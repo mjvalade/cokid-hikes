@@ -8209,19 +8209,19 @@
 	
 	var _Application2 = _interopRequireDefault(_Application);
 	
-	var _NewTrailContainer = __webpack_require__(561);
+	var _NewTrailContainer = __webpack_require__(562);
 	
 	var _NewTrailContainer2 = _interopRequireDefault(_NewTrailContainer);
 	
-	var _TrailListContainer = __webpack_require__(563);
+	var _TrailListContainer = __webpack_require__(565);
 	
 	var _TrailListContainer2 = _interopRequireDefault(_TrailListContainer);
 	
-	var _TrailDetailContainer = __webpack_require__(566);
+	var _TrailDetailContainer = __webpack_require__(568);
 	
 	var _TrailDetailContainer2 = _interopRequireDefault(_TrailDetailContainer);
 	
-	var _NoMatch = __webpack_require__(568);
+	var _NoMatch = __webpack_require__(570);
 	
 	var _NoMatch2 = _interopRequireDefault(_NoMatch);
 	
@@ -8229,7 +8229,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(569);
+	__webpack_require__(571);
 	
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRedux.Provider,
@@ -32054,7 +32054,6 @@
 	    data: [],
 	    selectedTrail: null
 	  }
-	
 	};
 
 /***/ },
@@ -32215,7 +32214,7 @@
 	      type: 'LOGOUT'
 	    });
 	
-	    _firebase2.default.auth.signOut().then(function () {
+	    _firebase2.default.auth().signOut().then(function () {
 	      console.log('Sign out successful!');
 	    });
 	  };
@@ -35797,11 +35796,17 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(299);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
 	var _reactRouter = __webpack_require__(513);
+	
+	var _redux = __webpack_require__(476);
+	
+	var _reactRedux = __webpack_require__(469);
 	
 	var _firebase = __webpack_require__(499);
 	
@@ -35819,52 +35824,69 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Header = function Header(props) {
-	  var auth = props.auth;
-	  var status = props.status;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	  return _react2.default.createElement(
-	    'header',
-	    { className: 'MainHeader' },
-	    _react2.default.createElement(
-	      'h1',
-	      { className: 'MainTitle' },
-	      _react2.default.createElement(
-	        _reactRouter.Link,
-	        {
-	          to: '/',
-	          className: 'MainTitle'
-	        },
-	        'CO Kid Hikes'
-	      )
-	    ),
-	    _react2.default.createElement(
-	      'section',
-	      { className: 'HeaderLinks' },
-	      _react2.default.createElement(
-	        _reactRouter.Link,
-	        {
-	          to: '/NewTrail',
-	          className: 'NewIcon',
-	          activeClassName: 'active'
-	        },
-	        'ADD NEW'
-	      ),
-	      _react2.default.createElement(
-	        _reactRouter.Link,
-	        {
-	          to: '/TrailList',
-	          className: 'ListIcon',
-	          activeClassName: 'active' },
-	        'TRAIL LIST'
-	      ),
-	      _react2.default.createElement(_SignIn2.default, null)
-	    )
-	  );
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Header = function (_Component) {
+	  _inherits(Header, _Component);
+	
+	  function Header() {
+	    _classCallCheck(this, Header);
+	
+	    return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
+	  }
+	
+	  _createClass(Header, [{
+	    key: 'render',
+	    value: function render() {
+	      console.log(this.props.status);
+	      return _react2.default.createElement(
+	        'header',
+	        { className: 'MainHeader' },
+	        _react2.default.createElement(
+	          'h1',
+	          { className: 'MainTitle' },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            {
+	              to: '/',
+	              className: 'MainTitle'
+	            },
+	            'CO Kid Hikes'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'section',
+	          { className: 'HeaderLinks' },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            {
+	              to: '/TrailList',
+	              className: 'ListIcon'
+	            },
+	            'TRAIL LIST'
+	          ),
+	          _react2.default.createElement(_SignIn2.default, null)
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Header;
+	}(_react.Component);
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return state.auth;
 	};
 	
-	exports.default = Header;
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return (0, _redux.bindActionCreators)(actions, dispatch);
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Header);
 
 /***/ },
 /* 550 */
@@ -35886,6 +35908,8 @@
 	var _redux = __webpack_require__(476);
 	
 	var _reactRedux = __webpack_require__(469);
+	
+	var _reactRouter = __webpack_require__(513);
 	
 	var _auth = __webpack_require__(512);
 	
@@ -35922,22 +35946,34 @@
 	
 	      if (status === 'LOGGED_IN') {
 	        return _react2.default.createElement(
-	          'section',
-	          { className: 'AuthWindow' },
+	          'div',
+	          null,
 	          _react2.default.createElement(
-	            'p',
-	            { className: 'User' },
-	            username
+	            _reactRouter.Link,
+	            {
+	              to: '/NewTrail',
+	              className: 'NewIcon'
+	            },
+	            'ADD NEW'
 	          ),
 	          _react2.default.createElement(
-	            'button',
-	            {
-	              onClick: function onClick(e) {
-	                return logOut();
+	            'section',
+	            { className: 'AuthWindow' },
+	            _react2.default.createElement(
+	              'p',
+	              { className: 'User' },
+	              username
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              {
+	                onClick: function onClick(e) {
+	                  return logOut();
+	                },
+	                className: 'AuthButton'
 	              },
-	              className: 'AuthButton'
-	            },
-	            'Log Out'
+	              'Log Out'
+	            )
 	          )
 	        );
 	      } else {
@@ -36010,7 +36046,7 @@
 	
 	var _DashboardContainer2 = _interopRequireDefault(_DashboardContainer);
 	
-	var _SidebarContainer = __webpack_require__(557);
+	var _SidebarContainer = __webpack_require__(558);
 	
 	var _SidebarContainer2 = _interopRequireDefault(_SidebarContainer);
 	
@@ -36056,7 +36092,7 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.props.fetchAllTrails();
+	      // this.props.fetchAllTrails();
 	      this.findUserCoords();
 	    }
 	  }, {
@@ -36653,43 +36689,69 @@
 /* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(299);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _MainMap = __webpack_require__(557);
+	
+	var _MainMap2 = _interopRequireDefault(_MainMap);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// import ForecastApi from './ForecastApi';
 	
+	var Dashboard = function (_Component) {
+	  _inherits(Dashboard, _Component);
 	
-	var Dashboard = function Dashboard(props) {
-	  console.log(props);
-	  return _react2.default.createElement(
-	    "main",
-	    { className: "Dashboard" },
-	    _react2.default.createElement(
-	      "section",
-	      { className: "DashMain" },
-	      _react2.default.createElement(
-	        "p",
-	        { className: "NatureQuote" },
-	        "\u201CTeaching children about the natural world should be treated as one of the most important events in their lives.\u201D"
-	      ),
-	      _react2.default.createElement(
-	        "p",
-	        { className: "NatureQuote" },
-	        "\u2013 Thomas Berry"
-	      ),
-	      _react2.default.createElement("img", { src: "", alt: "map - all trails", className: "MainMap" })
-	    )
-	  );
-	};
+	  function Dashboard() {
+	    _classCallCheck(this, Dashboard);
+	
+	    return _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).apply(this, arguments));
+	  }
+	
+	  _createClass(Dashboard, [{
+	    key: 'render',
+	    value: function render() {
+	
+	      return _react2.default.createElement(
+	        'main',
+	        { className: 'Dashboard' },
+	        _react2.default.createElement(
+	          'section',
+	          { className: 'DashMain' },
+	          _react2.default.createElement(
+	            'p',
+	            { className: 'NatureQuote' },
+	            '\u201CTeaching children about the natural world should be treated as one of the most important events in their lives.\u201D'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            { className: 'NatureQuote' },
+	            '\u2013 Thomas Berry'
+	          ),
+	          _react2.default.createElement(_MainMap2.default, null)
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Dashboard;
+	}(_react.Component);
 	
 	exports.default = Dashboard;
 
@@ -36703,22 +36765,121 @@
 	  value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var DENVER_LATLONG = {
+	  lat: 39.754185,
+	  lng: -105.230484
+	};
+	
+	var MainMap = function (_Component) {
+	  _inherits(MainMap, _Component);
+	
+	  function MainMap() {
+	    _classCallCheck(this, MainMap);
+	
+	    return _possibleConstructorReturn(this, (MainMap.__proto__ || Object.getPrototypeOf(MainMap)).call(this));
+	  }
+	
+	  _createClass(MainMap, [{
+	    key: 'render',
+	    value: function render() {
+	      var mapStyle = {
+	        width: 600,
+	        height: 400,
+	        border: '1px solid #283739'
+	      };
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          {
+	            ref: 'map',
+	            style: mapStyle,
+	            alt: 'map - all trails',
+	            className: 'MainMap' },
+	          'I should be a map!'
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.map = this.createMap();
+	      this.marker = this.createMarker();
+	    }
+	  }, {
+	    key: 'createMap',
+	    value: function createMap() {
+	      var mapOptions = {
+	        center: DENVER_LATLONG,
+	        zoom: 10
+	      };
+	      return new google.maps.Map(this.refs.map, mapOptions);
+	    }
+	  }, {
+	    key: 'createMarker',
+	    value: function createMarker() {
+	      return new google.maps.Marker({
+	        position: { lat: 39.797920, lng: -105.493301 },
+	        map: this.map
+	      });
+	    }
+	  }]);
+	
+	  return MainMap;
+	}(_react.Component);
+	
+	exports.default = MainMap;
+	//
+	// ReactDOM.render(
+	//   <Map />,
+	//   document.getElementById('root')
+	// );
+
+/***/ },
+/* 558 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
 	var _reactRedux = __webpack_require__(469);
 	
-	var _Sidebar = __webpack_require__(558);
+	var _Sidebar = __webpack_require__(559);
 	
 	var _Sidebar2 = _interopRequireDefault(_Sidebar);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return { trailsList: state.trails.data };
+	  return {
+	    auth: state.auth,
+	    trailsList: state.trails.data
+	  };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Sidebar2.default);
 
 /***/ },
-/* 558 */
+/* 559 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36739,9 +36900,9 @@
 	
 	var _firebase2 = _interopRequireDefault(_firebase);
 	
-	var _lodash = __webpack_require__(559);
+	var _lodash = __webpack_require__(560);
 	
-	var _Favorites = __webpack_require__(560);
+	var _Favorites = __webpack_require__(561);
 	
 	var _Favorites2 = _interopRequireDefault(_Favorites);
 	
@@ -36764,15 +36925,19 @@
 	
 	  _createClass(Sidebar, [{
 	    key: 'render',
+	
+	
+	    // map through user's favorite trails and render those on page load, not all trails
+	
 	    value: function render() {
 	      var displayFavorites = (0, _lodash.map)(this.props.trailsList, function (trail) {
 	        return _react2.default.createElement(_Favorites2.default, _extends({ key: trail.uid }, trail));
 	      });
-	
+	      console.log(this.props.trailsList);
 	      return _react2.default.createElement(
 	        'aside',
 	        { className: 'SideBar Aside Aside-1' },
-	        _react2.default.createElement('img', { src: '../assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
+	        _react2.default.createElement('img', { src: '../public/assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
 	        _react2.default.createElement(
 	          'h2',
 	          { className: 'SideTitle' },
@@ -36789,7 +36954,7 @@
 	exports.default = Sidebar;
 
 /***/ },
-/* 559 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -53815,7 +53980,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(490)(module)))
 
 /***/ },
-/* 560 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -53829,6 +53994,9 @@
 	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// convert to class like TrailCard
+	// reference grocery list redux repo for "starred grociers" array functionality
 	
 	var Favorites = function Favorites(trail) {
 	  return _react2.default.createElement(
@@ -53844,7 +54012,7 @@
 	exports.default = Favorites;
 
 /***/ },
-/* 561 */
+/* 562 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53857,7 +54025,7 @@
 	
 	var _actions = __webpack_require__(552);
 	
-	var _NewTrailForm = __webpack_require__(562);
+	var _NewTrailForm = __webpack_require__(563);
 	
 	var _NewTrailForm2 = _interopRequireDefault(_NewTrailForm);
 	
@@ -53874,7 +54042,7 @@
 	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(_NewTrailForm2.default);
 
 /***/ },
-/* 562 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53890,6 +54058,10 @@
 	var _react2 = _interopRequireDefault(_react);
 	
 	var _reactRouter = __webpack_require__(513);
+	
+	var _Map = __webpack_require__(564);
+	
+	var _Map2 = _interopRequireDefault(_Map);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -54023,13 +54195,13 @@
 	          ),
 	          _react2.default.createElement(
 	            'section',
-	            { className: 'MapRank' },
+	            { className: 'RightSide' },
 	            _react2.default.createElement(
 	              'p',
-	              null,
+	              { className: 'Ranking' },
 	              'Difficulty Ranking:'
 	            ),
-	            _react2.default.createElement('img', { src: '', alt: 'map', className: 'TrailheadMap' })
+	            _react2.default.createElement(_Map2.default, null)
 	          )
 	        )
 	      );
@@ -54046,7 +54218,116 @@
 	exports.default = NewTrailForm;
 
 /***/ },
-/* 563 */
+/* 564 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var DENVER_LATLONG = {
+	  lat: 39.754185,
+	  lng: -105.230484
+	};
+	
+	var Map = function (_Component) {
+	  _inherits(Map, _Component);
+	
+	  function Map() {
+	    _classCallCheck(this, Map);
+	
+	    return _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).call(this));
+	  }
+	
+	  _createClass(Map, [{
+	    key: 'render',
+	    value: function render() {
+	      var mapStyle = {
+	        width: 600,
+	        height: 400,
+	        border: '1px solid black'
+	      };
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          {
+	            ref: 'map',
+	            style: mapStyle,
+	            className: 'TrailheadMap' },
+	          'Map for trailhead'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          {
+	            onClick: this.setTrailheadMarker,
+	            className: 'MarkerButton' },
+	          'Set Trailhead'
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.map = this.createMap();
+	      this.marker = this.createMarker();
+	    }
+	  }, {
+	    key: 'createMap',
+	    value: function createMap() {
+	      var mapOptions = {
+	        center: DENVER_LATLONG,
+	        zoom: 10
+	      };
+	      return new google.maps.Map(this.refs.map, mapOptions);
+	    }
+	  }, {
+	    key: 'createMarker',
+	    value: function createMarker() {
+	      return new google.maps.Marker({
+	        position: { lat: 39.797920, lng: -105.493301 },
+	        map: this.map
+	      });
+	    }
+	  }, {
+	    key: 'setTrailheadMarker',
+	    value: function setTrailheadMarker() {
+	      console.log(this);
+	      // this.map.getPosition();
+	      // getPosition of marker = grab lat/long
+	    }
+	  }]);
+	
+	  return Map;
+	}(_react.Component);
+	
+	exports.default = Map;
+	//
+	// ReactDOM.render(
+	//   <Map />,
+	//   document.getElementById('root')
+	// );
+
+/***/ },
+/* 565 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54063,7 +54344,7 @@
 	
 	var _redux = __webpack_require__(476);
 	
-	var _TrailList = __webpack_require__(564);
+	var _TrailList = __webpack_require__(566);
 	
 	var _TrailList2 = _interopRequireDefault(_TrailList);
 	
@@ -54076,13 +54357,16 @@
 	};
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return { trailsList: state.trails.data };
+	  return {
+	    auth: state.auth,
+	    trailsList: state.trails.data
+	  };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TrailList2.default);
 
 /***/ },
-/* 564 */
+/* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54103,9 +54387,9 @@
 	
 	var _firebase2 = _interopRequireDefault(_firebase);
 	
-	var _lodash = __webpack_require__(559);
+	var _lodash = __webpack_require__(560);
 	
-	var _TrailCard = __webpack_require__(565);
+	var _TrailCard = __webpack_require__(567);
 	
 	var _TrailCard2 = _interopRequireDefault(_TrailCard);
 	
@@ -54135,6 +54419,7 @@
 	        return _react2.default.createElement(_TrailCard2.default, _extends({ key: trail.uid }, trail, { setSelectedTrail: _this2.props.setSelectedTrail }));
 	      });
 	
+	      console.log(this.props);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'TrailList' },
@@ -54151,7 +54436,7 @@
 	exports.default = TrailList;
 
 /***/ },
-/* 565 */
+/* 567 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -54237,7 +54522,7 @@
 	exports.default = TrailCard;
 
 /***/ },
-/* 566 */
+/* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54250,7 +54535,7 @@
 	
 	var _redux = __webpack_require__(476);
 	
-	var _TrailDetails = __webpack_require__(567);
+	var _TrailDetails = __webpack_require__(569);
 	
 	var _TrailDetails2 = _interopRequireDefault(_TrailDetails);
 	
@@ -54272,7 +54557,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TrailDetails2.default);
 
 /***/ },
-/* 567 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54287,7 +54572,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _lodash = __webpack_require__(559);
+	var _lodash = __webpack_require__(560);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -54385,7 +54670,7 @@
 	exports.default = TrailDetails;
 
 /***/ },
-/* 568 */
+/* 570 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -54415,16 +54700,16 @@
 	exports.default = NoMatch;
 
 /***/ },
-/* 569 */
+/* 571 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(570);
+	var content = __webpack_require__(572);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(572)(content, {});
+	var update = __webpack_require__(574)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -54441,21 +54726,21 @@
 	}
 
 /***/ },
-/* 570 */
+/* 572 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(571)();
+	exports = module.exports = __webpack_require__(573)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding: 5px 0 5px 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderLinks {\n  display: flex;\n  flex-direction: column;\n  margin-left: auto;\n  padding-right: 10px; }\n  @media screen and (min-width: 700px) {\n    .HeaderLinks {\n      padding-right: 20px;\n      flex-direction: row; } }\n\n.NewIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .NewIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.ListIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .ListIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.User {\n  color: #A2C11C;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .User {\n      margin-bottom: 10px; } }\n\n.AuthButton {\n  height: 30px;\n  width: 90px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .AuthButton:hover {\n    border: 1px solid #A2C11C; }\n\n.DashboardView {\n  display: flex;\n  flex-flow: row wrap; }\n\n.Dashboard {\n  flex: none;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .Dashboard {\n      flex: 3;\n      height: 80vh; } }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  height: 83vh;\n  text-align: center; }\n\n.MtnIcon {\n  height: 40px;\n  width: 40px;\n  margin-top: 15px; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 20px 0;\n  font-size: 2.5em; }\n\n.FavoriteTitle {\n  color: white;\n  font-size: 1.5em;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipSearch {\n  display: inline-flex;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipInputs {\n  margin: 0 5px 0 5px; }\n\n.NatureQuote {\n  margin: 10px 0; }\n\n.MainMap {\n  height: 60vh;\n  width: 60vw; }\n\n.Forecast {\n  background: turquoise;\n  float: right;\n  height: 100%; }\n  .Forecast .weatherApi {\n    background: white;\n    height: 200px;\n    width: 200px; }\n\n.InputArea {\n  display: flex;\n  align-items: flex-start;\n  width: 95%;\n  margin: auto;\n  margin-top: 20px; }\n\n.NewTrailForm {\n  flex: 1;\n  flex-direction: column;\n  align-items: flex-start; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 10px 10px; }\n\n.NewTrailLabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1.5em; }\n\n.NewTrailField {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1.125em;\n  width: 300px; }\n\n.NewTrailLabel,\n.NewTrailField {\n  float: right;\n  margin-right: 50px; }\n\n.SaveButton {\n  float: right;\n  margin-right: 175px;\n  height: 30px;\n  width: 60px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .SaveButton:hover {\n    border: 1px solid #A2C11C; }\n\n.MapRank {\n  border: 1px solid grey;\n  flex: 1.5; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px;\n  border: 1px solid #2C5D63; }\n\n.TrailList {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  margin: 30px 50px 0 50px; }\n\n.TrailCard {\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #0C273D;\n  background-color: white;\n  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);\n  height: 300px;\n  width: 350px;\n  margin-bottom: 40px; }\n  .TrailCard:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n\n.CardLink {\n  text-decoration: none;\n  font-weight: bold;\n  color: black; }\n\n.TrailImg {\n  height: 170px;\n  overflow: hidden; }\n\nimg {\n  opacity: 1;\n  width: 100%;\n  background: #2C5E2E;\n  height: 170px; }\n\n.TopContainer {\n  display: flex; }\n\n.CardTitle,\n.CardMiles {\n  display: inline-block;\n  line-height: 1.5em;\n  font-size: 125%;\n  text-align: left;\n  padding-left: 5px;\n  margin-top: 5px; }\n\n.CardMiles {\n  margin-left: auto;\n  padding-right: 5px; }\n\n.CardDesc {\n  font-size: 0.9em;\n  line-height: 1.5em;\n  padding: 0 5px 5px 5px; }\n\n.TrailDetail {\n  display: flex;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .TrailDetail {\n      flex-direction: none; } }\n\n.MtnIconDetail {\n  display: inline-block;\n  background: none;\n  height: 40px;\n  width: 40px;\n  margin-top: 15px;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .MtnIconDetail {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.DetailTitle {\n  display: inline-block;\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 20px 30px; }\n  @media screen and (min-width: 1100px) {\n    .DetailTitle {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.FullContainer {\n  display: flex;\n  flex-direction: column;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .FullContainer {\n      flex-direction: row; } }\n\n.LeftContainer {\n  display: flex;\n  flex-direction: column; }\n\n.DetailImg {\n  border: 10px solid #2C5D63;\n  width: 460px;\n  height: 288px; }\n\n.DetailDesc {\n  font-size: 18px;\n  line-height: 24px;\n  margin: 10px 0;\n  width: 600px; }\n\n.divider {\n  border: 2px solid #2C5D63;\n  width: 480px; }\n\n.DetailNotes {\n  margin-top: 5px; }\n\n.bold {\n  font-weight: bold; }\n\n.RightContainer {\n  display: flex;\n  flex-direction: column;\n  background: #2C5D63;\n  border: 5px solid #283739;\n  margin-top: 30px;\n  padding: 10px;\n  width: 450px; }\n  @media screen and (min-width: 1100px) {\n    .RightContainer {\n      margin-left: 8vw;\n      margin-top: 0; } }\n\n.InfoTitle {\n  color: white;\n  font-size: 36px; }\n\n.DetailMiles,\n.DetailElev {\n  color: white;\n  font-size: 18px;\n  line-height: 24px;\n  margin: 5px 0; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding: 5px 0 5px 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderLinks {\n  display: flex;\n  flex-direction: column;\n  margin-left: auto;\n  padding-right: 10px; }\n  @media screen and (min-width: 700px) {\n    .HeaderLinks {\n      padding-right: 20px;\n      flex-direction: row; } }\n\n.NewIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .NewIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.ListIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .ListIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.User {\n  color: #A2C11C;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .User {\n      margin-bottom: 10px; } }\n\n.AuthButton {\n  height: 30px;\n  width: 90px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .AuthButton:hover {\n    border: 1px solid #A2C11C; }\n\n.DashboardView {\n  display: flex;\n  flex-flow: row wrap; }\n\n.Dashboard {\n  flex: none;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .Dashboard {\n      flex: 3;\n      height: 80vh; } }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  height: 83vh;\n  text-align: center; }\n\n.MtnIcon {\n  height: 40px;\n  width: 40px;\n  margin-top: 15px; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 20px 0;\n  font-size: 2.5em; }\n\n.FavoriteTitle {\n  color: white;\n  font-size: 1.5em;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipSearch {\n  display: inline-flex;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipInputs {\n  margin: 0 5px 0 5px; }\n\n.NatureQuote {\n  line-height: 20px;\n  margin: auto;\n  margin-bottom: 10px;\n  margin-top: 10px;\n  width: 80%; }\n\n.MainMap {\n  margin: auto;\n  margin-bottom: 20px; }\n\n.Forecast {\n  background: turquoise;\n  float: right;\n  height: 100%; }\n  .Forecast .weatherApi {\n    background: white;\n    height: 200px;\n    width: 200px; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 10px 20px; }\n\n.InputArea {\n  align-items: center;\n  display: flex;\n  width: 95%;\n  margin: auto;\n  margin-top: 40px;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .InputArea {\n      align-items: flex-start;\n      flex-direction: row; } }\n\n.NewTrailForm {\n  flex-direction: column;\n  align-items: flex-start; }\n\n.NewTrailLabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1.5em; }\n\n.NewTrailField {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1.125em;\n  width: 300px; }\n\n.NewTrailLabel,\n.NewTrailField {\n  float: right;\n  margin-right: 50px; }\n\n.SaveButton {\n  float: right;\n  margin-right: 175px;\n  height: 30px;\n  width: 60px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .SaveButton:hover {\n    border: 1px solid #A2C11C; }\n  @media screen and (min-width: 1100px) {\n    .SaveButton {\n      float: none; } }\n\n.RightSide {\n  display: flex;\n  flex-direction: column;\n  border-top: 2px solid black;\n  padding-top: 20px; }\n  @media screen and (min-width: 1100px) {\n    .RightSide {\n      border: none;\n      padding-top: 0; } }\n\n.Ranking {\n  display: inline-flex; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px;\n  border: 1px solid #2C5D63; }\n\n.MarkerButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  margin: 5px 0 20px 0;\n  height: 30px;\n  width: 125px; }\n\n.TrailList {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  margin: 30px 50px 0 50px; }\n\n.TrailCard {\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #0C273D;\n  background-color: white;\n  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);\n  height: 300px;\n  width: 350px;\n  margin-bottom: 40px; }\n  .TrailCard:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n\n.CardLink {\n  text-decoration: none;\n  font-weight: bold;\n  color: black; }\n\n.TrailImg {\n  height: 170px;\n  overflow: hidden;\n  opacity: 1;\n  width: 100%;\n  background: #2C5E2E;\n  height: 170px; }\n\n.TopContainer {\n  display: flex; }\n\n.CardTitle,\n.CardMiles {\n  display: inline-block;\n  line-height: 1.5em;\n  font-size: 125%;\n  text-align: left;\n  padding-left: 5px;\n  margin-top: 5px; }\n\n.CardMiles {\n  margin-left: auto;\n  padding-right: 5px; }\n\n.CardDesc {\n  font-size: 0.9em;\n  line-height: 1.5em;\n  padding: 0 5px 5px 5px; }\n\n.TrailDetail {\n  display: flex;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .TrailDetail {\n      flex-direction: none; } }\n\n.MtnIconDetail {\n  display: inline-block;\n  background: none;\n  height: 40px;\n  width: 40px;\n  margin-top: 15px;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .MtnIconDetail {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.DetailTitle {\n  display: inline-block;\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 20px 30px; }\n  @media screen and (min-width: 1100px) {\n    .DetailTitle {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.FullContainer {\n  display: flex;\n  flex-direction: column;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .FullContainer {\n      flex-direction: row; } }\n\n.LeftContainer {\n  display: flex;\n  flex-direction: column; }\n\n.DetailImg {\n  border: 10px solid #2C5D63;\n  width: 460px;\n  height: 288px; }\n\n.DetailDesc {\n  font-size: 18px;\n  line-height: 24px;\n  margin: 10px 0;\n  width: 600px; }\n\n.divider {\n  border: 2px solid #2C5D63;\n  width: 480px; }\n\n.DetailNotes {\n  margin-top: 5px; }\n\n.bold {\n  font-weight: bold; }\n\n.RightContainer {\n  display: flex;\n  flex-direction: column;\n  background: #2C5D63;\n  border: 5px solid #283739;\n  margin-top: 30px;\n  padding: 10px;\n  width: 450px; }\n  @media screen and (min-width: 1100px) {\n    .RightContainer {\n      margin-left: 8vw;\n      margin-top: 0; } }\n\n.InfoTitle {\n  color: white;\n  font-size: 36px; }\n\n.DetailMiles,\n.DetailElev {\n  color: white;\n  font-size: 18px;\n  line-height: 24px;\n  margin: 5px 0; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 571 */
+/* 573 */
 /***/ function(module, exports) {
 
 	/*
@@ -54511,7 +54796,7 @@
 
 
 /***/ },
-/* 572 */
+/* 574 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
