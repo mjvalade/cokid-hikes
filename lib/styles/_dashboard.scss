@@ -57,7 +57,8 @@
 
 .DashMain {
   // border: 1px dashed grey;
-  // flex: 3;
+  // display: flex;
+  flex: 2;
 }
 
 .NatureQuote {
@@ -65,22 +66,27 @@
   margin: auto;
   margin-bottom: 10px;
   margin-top: 10px;
-  width: 80%;
+  width: 85%;
+  background: #2C5D63;
+  border-radius: 5px;
+  color: white;
+  padding: 10px;
+
 }
 
 .MainMap {
   margin: auto;
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 
-.Forecast {
-  background: turquoise;
-  float: right;
-  height: 100%;
-  // flex: 1;
-  .weatherApi {
-    background: white;
-    height: 200px;
-    width: 200px;
-  }
+.ForecastCurrent {
+  // background: #2C5D63;
+  // border-radius: 5px;
+  // color: white;
+
+  // display: flex;
+  margin: auto;
+  padding: 10px;
+  width: 90%;
 }

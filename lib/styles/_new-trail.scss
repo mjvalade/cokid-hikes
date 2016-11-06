@@ -46,18 +46,27 @@
   margin-right: 50px;
 }
 
-.SaveButton {
-  float: right;
+.Buttons {
+  display: flex;
+  flex-direction: column;
   margin-right: 175px;
-  height: 30px;
-  width: 60px;
-  border-radius: 5px;
-  border: none;
-  color: white;
+  margin-top: 300px;
+}
+
+.SaveButton,
+.CancelButton {
   background: #2C5D63;
+  border: none;
+  border-radius: 5px;
+  color: white;
   font-size: 1em;
+  float: right;
+  height: 30px;
+  width: 65px;
+  margin-bottom: 5px;
+  text-align: center;
   &:hover {
-    border: 1px solid #A2C11C;
+    color: #A2C11C;
   }
   @media screen and (min-width: 1100px) {
     float: none;
@@ -77,6 +86,7 @@
 
 .Ranking {
   display: inline-flex;
+  margin-bottom: 10px;
 }
 
 .TrailheadMap {

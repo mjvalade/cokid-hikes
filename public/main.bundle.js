@@ -31985,7 +31985,7 @@
 	var rootReducer = (0, _redux.combineReducers)({
 	  auth: _authReducer2.default,
 	  trails: _trailsReducer2.default,
-	  local: _localWeatherReducer2.default
+	  localWeatherReducer: _localWeatherReducer2.default
 	});
 	
 	exports.default = rootReducer;
@@ -36092,7 +36092,7 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      // this.props.fetchAllTrails();
+	      this.props.fetchAllTrails();
 	      this.findUserCoords();
 	    }
 	  }, {
@@ -36188,12 +36188,12 @@
 	  };
 	};
 	
-	var weatherApiKey = 'f4c4b366ab190a9052d740dd5d8fea64';
+	var weatherKey = 'f4c4b366ab190a9052d740dd5d8fea64';
 	
 	var fetchLocalWeather = function fetchLocalWeather(position) {
 	  var lat = position.coords.latitude;
 	  var long = position.coords.longitude;
-	  var weatherURLbyCoords = 'http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + long + '&units=imperial&appid=' + weatherApiKey;
+	  var weatherURLbyCoords = 'http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + long + '&units=imperial&appid=' + weatherKey;
 	
 	  return function (dispatch) {
 	    return (0, _isomorphicFetch2.default)(weatherURLbyCoords).then(function (response) {
@@ -36680,7 +36680,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return { localWeatherReducer: state.localWeatherReducer };
+	  return { weather: state.localWeatherReducer };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Dashboard2.default);
@@ -36695,8 +36695,6 @@
 	  value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
 	var _react = __webpack_require__(299);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -36707,51 +36705,54 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var Dashboard = function Dashboard(_ref) {
+	  var weather = _ref.weather;
 	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	  console.log(weather);
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	// import ForecastApi from './ForecastApi';
-	
-	var Dashboard = function (_Component) {
-	  _inherits(Dashboard, _Component);
-	
-	  function Dashboard() {
-	    _classCallCheck(this, Dashboard);
-	
-	    return _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).apply(this, arguments));
-	  }
-	
-	  _createClass(Dashboard, [{
-	    key: 'render',
-	    value: function render() {
-	
-	      return _react2.default.createElement(
-	        'main',
-	        { className: 'Dashboard' },
+	  return _react2.default.createElement(
+	    'main',
+	    { className: 'Dashboard' },
+	    _react2.default.createElement(
+	      'section',
+	      { className: 'DashMain' },
+	      _react2.default.createElement(
+	        'article',
+	        { className: 'NatureQuote' },
 	        _react2.default.createElement(
-	          'section',
-	          { className: 'DashMain' },
-	          _react2.default.createElement(
-	            'p',
-	            { className: 'NatureQuote' },
-	            '\u201CTeaching children about the natural world should be treated as one of the most important events in their lives.\u201D'
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            { className: 'NatureQuote' },
-	            '\u2013 Thomas Berry'
-	          ),
-	          _react2.default.createElement(_MainMap2.default, null)
+	          'p',
+	          null,
+	          '\u201CTeaching children about the natural world should be treated as one of the most important events in their lives.\u201D'
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          '\u2013 Thomas Berry'
 	        )
-	      );
-	    }
-	  }]);
-	
-	  return Dashboard;
-	}(_react.Component);
+	      ),
+	      _react2.default.createElement(
+	        'article',
+	        { className: 'ForecastCurrent' },
+	        Object.keys(weather).length ? _react2.default.createElement(
+	          'p',
+	          null,
+	          'Current forecast for ',
+	          weather.name,
+	          ': ',
+	          weather.weather[0].main,
+	          ' ',
+	          Math.round(weather.main.temp),
+	          '\u2109'
+	        ) : _react2.default.createElement(
+	          'p',
+	          null,
+	          'Fetching Local Weather ...'
+	        )
+	      ),
+	      _react2.default.createElement(_MainMap2.default, null)
+	    )
+	  );
+	};
 	
 	exports.default = Dashboard;
 
@@ -54095,6 +54096,11 @@
 	      this.context.router.transitionTo('/TrailList');
 	    }
 	  }, {
+	    key: 'cancel',
+	    value: function cancel() {
+	      this.context.router.transitionTo('/');
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -54187,11 +54193,22 @@
 	                }
 	              })
 	            ),
-	            _react2.default.createElement('input', {
-	              type: 'submit',
-	              className: 'SaveButton',
-	              value: 'Save'
-	            })
+	            _react2.default.createElement(
+	              'article',
+	              { className: 'Buttons' },
+	              _react2.default.createElement('input', {
+	                type: 'submit',
+	                className: 'SaveButton',
+	                value: 'Save'
+	              }),
+	              _react2.default.createElement('input', {
+	                value: 'Cancel',
+	                className: 'CancelButton',
+	                onClick: function onClick(e) {
+	                  e.preventDefault();
+	                  _this2.cancel();
+	                } })
+	            )
 	          ),
 	          _react2.default.createElement(
 	            'section',
@@ -54199,7 +54216,7 @@
 	            _react2.default.createElement(
 	              'p',
 	              { className: 'Ranking' },
-	              'Difficulty Ranking:'
+	              'Scroll to zoom | Click map to mark trail head location'
 	            ),
 	            _react2.default.createElement(_Map2.default, null)
 	          )
@@ -54252,7 +54269,13 @@
 	  function Map() {
 	    _classCallCheck(this, Map);
 	
-	    return _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).call(this));
+	    var _this = _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).call(this));
+	
+	    _this.state = {
+	      zoom: 10,
+	      position: {}
+	    };
+	    return _this;
 	  }
 	
 	  _createClass(Map, [{
@@ -54262,7 +54285,6 @@
 	        width: 600,
 	        height: 400,
 	        border: '1px solid black'
-	        // switch styles to CSS and make responsive with %
 	      };
 	
 	      return _react2.default.createElement(
@@ -54270,51 +54292,74 @@
 	        null,
 	        _react2.default.createElement(
 	          'div',
-	          {
-	            ref: 'map',
-	            style: mapStyle,
-	            className: 'TrailheadMap' },
-	          'Map for trailhead'
+	          { ref: 'map', style: mapStyle },
+	          'Map'
 	        ),
 	        _react2.default.createElement(
-	          'button',
-	          {
-	            onClick: this.setTrailheadMarker,
-	            className: 'MarkerButton' },
-	          'Set Trailhead'
+	          'div',
+	          { className: 'UpdatedText' },
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Lat/Long: ',
+	            this.state.position.lat,
+	            ', ',
+	            this.state.position.lng
+	          )
 	        )
 	      );
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      var _this2 = this;
+	
 	      this.map = this.createMap();
-	      this.marker = this.createMarker();
+	      google.maps.event.addListener(this.map, 'zoom_changed', function () {
+	        return _this2.handleZoomChange();
+	      });
+	      google.maps.event.addListener(this.map, 'click', function (e) {
+	        return _this2.setMarker(e.latLng);
+	      });
+	    }
+	  }, {
+	    key: 'componentDidUnMount',
+	    value: function componentDidUnMount() {
+	      google.maps.event.clearListeners(map, 'zoom_changed');
+	      google.maps.event.clearListeners(map, 'click');
 	    }
 	  }, {
 	    key: 'createMap',
 	    value: function createMap() {
 	      var mapOptions = {
 	        center: DENVER_LATLONG,
-	        zoom: 10
+	        zoom: this.state.zoom,
+	        mapTypeId: 'terrain'
 	      };
 	      return new google.maps.Map(this.refs.map, mapOptions);
 	    }
 	  }, {
-	    key: 'createMarker',
-	    value: function createMarker() {
-	      return new google.maps.Marker({
-	        position: { lat: 39.797920, lng: -105.493301 },
-	        map: this.map,
-	        title: 'trailhead'
+	    key: 'handleZoomChange',
+	    value: function handleZoomChange() {
+	      this.setState({
+	        zoom: this.map.getZoom()
 	      });
 	    }
 	  }, {
-	    key: 'setTrailheadMarker',
-	    value: function setTrailheadMarker() {
-	      console.log(this);
-	      // this.map.getPosition();
-	      // getPosition of marker = grab lat/long
+	    key: 'setMarker',
+	    value: function setMarker(latLng) {
+	      console.log('setMarker', latLng.lat(), latLng.lng());
+	      this.setState({
+	        position: {
+	          lat: latLng.lat(),
+	          lng: latLng.lng()
+	        }
+	      });
+	      return new google.maps.Marker({
+	        position: latLng,
+	        animation: google.maps.Animation.DROP,
+	        map: this.map
+	      });
 	    }
 	  }]);
 	
@@ -54322,11 +54367,6 @@
 	}(_react.Component);
 	
 	exports.default = Map;
-	//
-	// ReactDOM.render(
-	//   <Map />,
-	//   document.getElementById('root')
-	// );
 
 /***/ },
 /* 565 */
@@ -54736,7 +54776,7 @@
 	
 	
 	// module
-	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding: 5px 0 5px 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderLinks {\n  display: flex;\n  flex-direction: column;\n  margin-left: auto;\n  padding-right: 10px; }\n  @media screen and (min-width: 700px) {\n    .HeaderLinks {\n      padding-right: 20px;\n      flex-direction: row; } }\n\n.NewIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .NewIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.ListIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .ListIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.User {\n  color: #A2C11C;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .User {\n      margin-bottom: 10px; } }\n\n.AuthButton {\n  height: 30px;\n  width: 90px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .AuthButton:hover {\n    border: 1px solid #A2C11C; }\n\n.DashboardView {\n  display: flex;\n  flex-flow: row wrap; }\n\n.Dashboard {\n  flex: none;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .Dashboard {\n      flex: 3;\n      height: 80vh; } }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  height: 83vh;\n  text-align: center; }\n\n.MtnIcon {\n  height: 40px;\n  width: 40px;\n  margin-top: 15px; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 20px 0;\n  font-size: 2.5em; }\n\n.FavoriteTitle {\n  color: white;\n  font-size: 1.5em;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipSearch {\n  display: inline-flex;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipInputs {\n  margin: 0 5px 0 5px; }\n\n.NatureQuote {\n  line-height: 20px;\n  margin: auto;\n  margin-bottom: 10px;\n  margin-top: 10px;\n  width: 80%; }\n\n.MainMap {\n  margin: auto;\n  margin-bottom: 20px; }\n\n.Forecast {\n  background: turquoise;\n  float: right;\n  height: 100%; }\n  .Forecast .weatherApi {\n    background: white;\n    height: 200px;\n    width: 200px; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 10px 20px; }\n\n.InputArea {\n  align-items: center;\n  display: flex;\n  width: 95%;\n  margin: auto;\n  margin-top: 40px;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .InputArea {\n      align-items: flex-start;\n      flex-direction: row; } }\n\n.NewTrailForm {\n  flex-direction: column;\n  align-items: flex-start; }\n\n.NewTrailLabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1.5em; }\n\n.NewTrailField {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1.125em;\n  width: 300px; }\n\n.NewTrailLabel,\n.NewTrailField {\n  float: right;\n  margin-right: 50px; }\n\n.SaveButton {\n  float: right;\n  margin-right: 175px;\n  height: 30px;\n  width: 60px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .SaveButton:hover {\n    border: 1px solid #A2C11C; }\n  @media screen and (min-width: 1100px) {\n    .SaveButton {\n      float: none; } }\n\n.RightSide {\n  display: flex;\n  flex-direction: column;\n  border-top: 2px solid black;\n  padding-top: 20px; }\n  @media screen and (min-width: 1100px) {\n    .RightSide {\n      border: none;\n      padding-top: 0; } }\n\n.Ranking {\n  display: inline-flex; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px;\n  border: 1px solid #2C5D63; }\n\n.MarkerButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  margin: 5px 0 20px 0;\n  height: 30px;\n  width: 125px; }\n\n.TrailList {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  margin: 30px 50px 0 50px; }\n\n.TrailCard {\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #0C273D;\n  background-color: white;\n  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);\n  height: 300px;\n  width: 350px;\n  margin-bottom: 40px; }\n  .TrailCard:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n\n.CardLink {\n  text-decoration: none;\n  font-weight: bold;\n  color: black; }\n\n.TrailImg {\n  height: 170px;\n  overflow: hidden;\n  opacity: 1;\n  width: 100%;\n  background: #2C5E2E;\n  height: 170px; }\n\n.TopContainer {\n  display: flex; }\n\n.CardTitle,\n.CardMiles {\n  display: inline-block;\n  line-height: 1.5em;\n  font-size: 125%;\n  text-align: left;\n  padding-left: 5px;\n  margin-top: 5px; }\n\n.CardMiles {\n  margin-left: auto;\n  padding-right: 5px; }\n\n.CardDesc {\n  font-size: 0.9em;\n  line-height: 1.5em;\n  padding: 0 5px 5px 5px; }\n\n.TrailDetail {\n  display: flex;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .TrailDetail {\n      flex-direction: none; } }\n\n.MtnIconDetail {\n  display: inline-block;\n  background: none;\n  height: 40px;\n  width: 40px;\n  margin-top: 15px;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .MtnIconDetail {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.DetailTitle {\n  display: inline-block;\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 20px 30px; }\n  @media screen and (min-width: 1100px) {\n    .DetailTitle {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.FullContainer {\n  display: flex;\n  flex-direction: column;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .FullContainer {\n      flex-direction: row; } }\n\n.LeftContainer {\n  display: flex;\n  flex-direction: column; }\n\n.DetailImg {\n  border: 10px solid #2C5D63;\n  width: 460px;\n  height: 288px; }\n\n.DetailDesc {\n  font-size: 18px;\n  line-height: 24px;\n  margin: 10px 0;\n  width: 600px; }\n\n.divider {\n  border: 2px solid #2C5D63;\n  width: 480px; }\n\n.DetailNotes {\n  margin-top: 5px; }\n\n.bold {\n  font-weight: bold; }\n\n.RightContainer {\n  display: flex;\n  flex-direction: column;\n  background: #2C5D63;\n  border: 5px solid #283739;\n  margin-top: 30px;\n  padding: 10px;\n  width: 450px; }\n  @media screen and (min-width: 1100px) {\n    .RightContainer {\n      margin-left: 8vw;\n      margin-top: 0; } }\n\n.InfoTitle {\n  color: white;\n  font-size: 36px; }\n\n.DetailMiles,\n.DetailElev {\n  color: white;\n  font-size: 18px;\n  line-height: 24px;\n  margin: 5px 0; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding: 5px 0 5px 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderLinks {\n  display: flex;\n  flex-direction: column;\n  margin-left: auto;\n  padding-right: 10px; }\n  @media screen and (min-width: 700px) {\n    .HeaderLinks {\n      padding-right: 20px;\n      flex-direction: row; } }\n\n.NewIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .NewIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.ListIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .ListIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.User {\n  color: #A2C11C;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .User {\n      margin-bottom: 10px; } }\n\n.AuthButton {\n  height: 30px;\n  width: 90px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .AuthButton:hover {\n    border: 1px solid #A2C11C; }\n\n.DashboardView {\n  display: flex;\n  flex-flow: row wrap; }\n\n.Dashboard {\n  flex: none;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .Dashboard {\n      flex: 3;\n      height: 80vh; } }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  height: 83vh;\n  text-align: center; }\n\n.MtnIcon {\n  height: 40px;\n  width: 40px;\n  margin-top: 15px; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 20px 0;\n  font-size: 2.5em; }\n\n.FavoriteTitle {\n  color: white;\n  font-size: 1.5em;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipSearch {\n  display: inline-flex;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipInputs {\n  margin: 0 5px 0 5px; }\n\n.DashMain {\n  flex: 2; }\n\n.NatureQuote {\n  line-height: 20px;\n  margin: auto;\n  margin-bottom: 10px;\n  margin-top: 10px;\n  width: 85%;\n  background: #2C5D63;\n  border-radius: 5px;\n  color: white;\n  padding: 10px; }\n\n.MainMap {\n  margin: auto;\n  margin-top: 10px;\n  margin-bottom: 20px; }\n\n.ForecastCurrent {\n  margin: auto;\n  padding: 10px;\n  width: 90%; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 10px 20px; }\n\n.InputArea {\n  align-items: center;\n  display: flex;\n  width: 95%;\n  margin: auto;\n  margin-top: 40px;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .InputArea {\n      align-items: flex-start;\n      flex-direction: row; } }\n\n.NewTrailForm {\n  flex-direction: column;\n  align-items: flex-start; }\n\n.NewTrailLabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1.5em; }\n\n.NewTrailField {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1.125em;\n  width: 300px; }\n\n.NewTrailLabel,\n.NewTrailField {\n  float: right;\n  margin-right: 50px; }\n\n.Buttons {\n  display: flex;\n  flex-direction: column;\n  margin-right: 175px;\n  margin-top: 300px; }\n\n.SaveButton,\n.CancelButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  float: right;\n  height: 30px;\n  width: 65px;\n  margin-bottom: 5px;\n  text-align: center; }\n  .SaveButton:hover,\n  .CancelButton:hover {\n    color: #A2C11C; }\n  @media screen and (min-width: 1100px) {\n    .SaveButton,\n    .CancelButton {\n      float: none; } }\n\n.RightSide {\n  display: flex;\n  flex-direction: column;\n  border-top: 2px solid black;\n  padding-top: 20px; }\n  @media screen and (min-width: 1100px) {\n    .RightSide {\n      border: none;\n      padding-top: 0; } }\n\n.Ranking {\n  display: inline-flex;\n  margin-bottom: 10px; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px;\n  border: 1px solid #2C5D63; }\n\n.MarkerButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  margin: 5px 0 20px 0;\n  height: 30px;\n  width: 125px; }\n\n.TrailList {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  margin: 30px 50px 0 50px; }\n\n.TrailCard {\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #0C273D;\n  background-color: white;\n  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);\n  height: 300px;\n  width: 350px;\n  margin-bottom: 40px; }\n  .TrailCard:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n\n.CardLink {\n  text-decoration: none;\n  font-weight: bold;\n  color: black; }\n\n.TrailImg {\n  height: 170px;\n  overflow: hidden;\n  opacity: 1;\n  width: 100%;\n  background: #2C5E2E;\n  height: 170px; }\n\n.TopContainer {\n  display: flex; }\n\n.CardTitle,\n.CardMiles {\n  display: inline-block;\n  line-height: 1.5em;\n  font-size: 125%;\n  text-align: left;\n  padding-left: 5px;\n  margin-top: 5px; }\n\n.CardMiles {\n  margin-left: auto;\n  padding-right: 5px; }\n\n.CardDesc {\n  font-size: 0.9em;\n  line-height: 1.5em;\n  padding: 0 5px 5px 5px; }\n\n.TrailDetail {\n  display: flex;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .TrailDetail {\n      flex-direction: none; } }\n\n.MtnIconDetail {\n  display: inline-block;\n  background: none;\n  height: 40px;\n  width: 40px;\n  margin-top: 15px;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .MtnIconDetail {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.DetailTitle {\n  display: inline-block;\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 20px 30px; }\n  @media screen and (min-width: 1100px) {\n    .DetailTitle {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.FullContainer {\n  display: flex;\n  flex-direction: column;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .FullContainer {\n      flex-direction: row; } }\n\n.LeftContainer {\n  display: flex;\n  flex-direction: column; }\n\n.DetailImg {\n  border: 10px solid #2C5D63;\n  width: 460px;\n  height: 288px; }\n\n.DetailDesc {\n  font-size: 18px;\n  line-height: 24px;\n  margin: 10px 0;\n  width: 600px; }\n\n.divider {\n  border: 2px solid #2C5D63;\n  width: 480px; }\n\n.DetailNotes {\n  margin-top: 5px; }\n\n.bold {\n  font-weight: bold; }\n\n.RightContainer {\n  display: flex;\n  flex-direction: column;\n  background: #2C5D63;\n  border: 5px solid #283739;\n  margin-top: 30px;\n  padding: 10px;\n  width: 450px; }\n  @media screen and (min-width: 1100px) {\n    .RightContainer {\n      margin-left: 8vw;\n      margin-top: 0; } }\n\n.InfoTitle {\n  color: white;\n  font-size: 36px; }\n\n.DetailMiles,\n.DetailElev {\n  color: white;\n  font-size: 18px;\n  line-height: 24px;\n  margin: 5px 0; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
 	
 	// exports
 
