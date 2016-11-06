@@ -54262,6 +54262,7 @@
 	        width: 600,
 	        height: 400,
 	        border: '1px solid black'
+	        // switch styles to CSS and make responsive with %
 	      };
 	
 	      return _react2.default.createElement(
@@ -54304,7 +54305,8 @@
 	    value: function createMarker() {
 	      return new google.maps.Marker({
 	        position: { lat: 39.797920, lng: -105.493301 },
-	        map: this.map
+	        map: this.map,
+	        title: 'trailhead'
 	      });
 	    }
 	  }, {
