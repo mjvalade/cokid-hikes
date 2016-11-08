@@ -17,8 +17,12 @@
 .SideBar {
   flex: 1;
   background: #2C5D63;
-  height: 83vh;
+  // height: 40vh;
+  padding-bottom: 20px;
   text-align: center;
+  @media screen and (min-width: 900px) {
+    height: 83vh;
+  }
 }
 
 .MtnIcon {
@@ -39,6 +43,10 @@
   font-size: 1.5em;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.FavoritesError {
+  color: white;
 }
 
 .ZipSearch {
