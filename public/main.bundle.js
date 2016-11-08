@@ -32013,28 +32013,37 @@
 	      return {
 	        status: 'AWATING_AUTH_RESPONSE',
 	        username: 'guest',
-	        uid: null
+	        uid: null,
+	        favorites: []
 	      };
 	
 	    case 'LOGOUT':
 	      return {
 	        status: 'ANONYMOUS',
 	        username: 'guest',
-	        uid: null
+	        uid: null,
+	        favorites: []
 	      };
 	
 	    case 'LOGIN':
 	      return {
 	        status: 'LOGGED_IN',
 	        username: action.username,
-	        uid: action.uid
+	        uid: action.uid,
+	        favorites: action.favorites || []
 	      };
 	
 	    case 'STAR_TRAIL':
-	      return {
-	        data: state.data,
-	        starTrail: action.uid
-	      };
+	      return Object.assign(state, {
+	        favorites: state.favorites.concat(action.trail)
+	      });
+	
+	    case 'RECEIVE_FAVORITES':
+	      var favesData = state;
+	      if (action.auth.favorites.length) {
+	        console.log(action.auth.favorites);
+	      }
+	      return favesData;
 	
 	    default:
 	      return state;
@@ -32055,9 +32064,7 @@
 	    status: 'ANONYMOUS',
 	    username: null,
 	    uid: null,
-	    starTrail: []
-	    // allow user to select "favorites" and render those titles on dashboard
-	    // favorites: []
+	    favorites: []
 	  },
 	
 	  trails: {
@@ -32147,7 +32154,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.logOut = exports.logIn = exports.startListeningToAuth = undefined;
+	exports.fetchFavoriteTrails = exports.starTrail = exports.logOut = exports.logIn = exports.startListeningToAuth = undefined;
 	
 	var _firebase = __webpack_require__(499);
 	
@@ -32172,7 +32179,8 @@
 	        dispatch({
 	          type: 'LOGIN',
 	          uid: authData.uid,
-	          username: authData.displayName
+	          username: authData.displayName,
+	          favorites: authData.favorites
 	        });
 	      } else {
 	        if (getState().auth.status !== 'ANONYMOUS') {
@@ -32195,7 +32203,8 @@
 	      dispatch({
 	        type: 'LOGIN',
 	        uid: result.user.uid,
-	        username: result.user.displayName
+	        username: result.user.displayName,
+	        favorites: result.user.favorites
 	      });
 	    }).catch(function (error) {
 	      console.log('Error logging in: ', error);
@@ -32204,13 +32213,47 @@
 	}
 	
 	function logOut() {
+	  _firebase2.default.auth().signOut().then(function () {
+	    console.log('Sign out successful!');
+	  });
+	
 	  return function (dispatch) {
 	    dispatch({
 	      type: 'LOGOUT'
 	    });
+	  };
+	}
 	
-	    _firebase2.default.auth().signOut().then(function () {
-	      console.log('Sign out successful!');
+	function starTrail(userId, favorites, trailData) {
+	  var firebaseFaves = _firebase2.default.database().ref('users/' + userId);
+	  return function (dispatch) {
+	    firebaseFaves.set({
+	      starredTrails: favorites
+	    }).then(function () {
+	      console.log('firebase save');
+	      dispatch({
+	        type: 'STAR_TRAIL',
+	        trail: trailData
+	      });
+	    });
+	  };
+	}
+	
+	// function to fetch Favorite Trails and call in App/componentDidMount
+	
+	function fetchFavoriteTrails(userId) {
+	  var firebaseFaves = _firebase2.default.database().ref('users/' + userId);
+	  return function (dispatch) {
+	    var fetchedFaves = [];
+	
+	    firebaseFaves.once('value').then(function (result) {
+	      result.forEach(function (faves) {
+	        fetchedFaves.push(faves.val());
+	      });
+	      dispatch({
+	        type: 'RECEIVE_FAVORITES',
+	        faves: fetchedFaves
+	      });
 	    });
 	  };
 	}
@@ -32218,6 +32261,8 @@
 	exports.startListeningToAuth = startListeningToAuth;
 	exports.logIn = logIn;
 	exports.logOut = logOut;
+	exports.starTrail = starTrail;
+	exports.fetchFavoriteTrails = fetchFavoriteTrails;
 
 /***/ },
 /* 513 */
@@ -36031,7 +36076,7 @@
 	
 	var _actions = __webpack_require__(552);
 	
-	var _index = __webpack_require__(552);
+	var _auth = __webpack_require__(512);
 	
 	var _Header = __webpack_require__(549);
 	
@@ -36058,7 +36103,7 @@
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return (0, _redux.bindActionCreators)({ fetchLocalWeather: _actions.fetchLocalWeather, fetchAllTrails: _index.fetchAllTrails }, dispatch);
+	  return (0, _redux.bindActionCreators)({ fetchLocalWeather: _actions.fetchLocalWeather, fetchAllTrails: _actions.fetchAllTrails }, dispatch);
 	};
 	
 	var App = function (_Component) {
@@ -36088,33 +36133,46 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.props.fetchAllTrails();
+	      this.props.fetchFavoriteTrails();
 	      this.findUserCoords();
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var content = void 0;
-	      if (!this.props.trails) {
-	        content = 'Loading trails...';
-	      } else {
-	        content = _react2.default.createElement(
-	          'div',
-	          { className: 'DashboardView' },
-	          _react2.default.createElement(_SidebarContainer2.default, null),
-	          _react2.default.createElement(_DashboardContainer2.default, null)
-	        );
-	      }
-	
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'MainView' },
 	        _react2.default.createElement(
-	          'p',
-	          null,
-	          content
+	          'div',
+	          { className: 'DashboardView' },
+	          _react2.default.createElement(_SidebarContainer2.default, null),
+	          _react2.default.createElement(_DashboardContainer2.default, null)
 	        )
 	      );
 	    }
+	
+	    // trying to delay render until all data fetched so can send as props
+	
+	    // render() {
+	    //   let content;
+	    //   if (!this.props.trails) {
+	    //     content = 'Loading trails...';
+	    //   } else {
+	    //     content = (
+	    //       <div className="DashboardView">
+	    //         <SidebarContainer />
+	    //         <DashboardContainer />
+	    //       </div>
+	    //     );
+	    //   }
+	    //
+	    //   return(
+	    //     <div className="MainView">
+	    //       <p>{content}</p>
+	    //     </div>
+	    //   );
+	    // }
+	
 	  }]);
 	
 	  return App;
@@ -36131,7 +36189,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.fetchLocalWeather = exports.receiveCurrentLocalWeather = exports.starTrail = exports.setSelectedTrail = exports.fetchAllTrails = exports.createTrail = undefined;
+	exports.fetchLocalWeather = exports.receiveCurrentLocalWeather = exports.setSelectedTrail = exports.fetchAllTrails = exports.createTrail = undefined;
 	
 	var _isomorphicFetch = __webpack_require__(553);
 	
@@ -36144,8 +36202,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var firebaseTrails = _firebase2.default.database().ref('trails');
-	
-	// google mapApiKey = AIzaSyDdszB_F_2BL9CwE83cXn_1w80Od2myCTs;
 	
 	function createTrail(trailData) {
 	  return function (dispatch) {
@@ -36165,7 +36221,7 @@
 	}
 	
 	function fetchAllTrails() {
-	  return function (dispatch, getState) {
+	  return function (dispatch) {
 	    var fetchedTrails = [];
 	
 	    firebaseTrails.once('value').then(function (result) {
@@ -36183,13 +36239,6 @@
 	var setSelectedTrail = function setSelectedTrail(uid) {
 	  return {
 	    type: 'SET_SELECTED_TRAIL',
-	    uid: uid
-	  };
-	};
-	
-	var starTrail = function starTrail(uid) {
-	  return {
-	    type: 'STAR_TRAIL',
 	    uid: uid
 	  };
 	};
@@ -36220,7 +36269,6 @@
 	exports.createTrail = createTrail;
 	exports.fetchAllTrails = fetchAllTrails;
 	exports.setSelectedTrail = setSelectedTrail;
-	exports.starTrail = starTrail;
 	exports.receiveCurrentLocalWeather = receiveCurrentLocalWeather;
 	exports.fetchLocalWeather = fetchLocalWeather;
 
@@ -53907,9 +53955,13 @@
 	
 	var _reactRedux = __webpack_require__(469);
 	
+	var _redux = __webpack_require__(476);
+	
 	var _Sidebar = __webpack_require__(560);
 	
 	var _Sidebar2 = _interopRequireDefault(_Sidebar);
+	
+	var _auth = __webpack_require__(512);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -53920,7 +53972,13 @@
 	  };
 	};
 	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Sidebar2.default);
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return (0, _redux.bindActionCreators)({
+	    starTrail: _auth.starTrail
+	  }, dispatch);
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Sidebar2.default);
 
 /***/ },
 /* 560 */
@@ -53969,15 +54027,10 @@
 	
 	  _createClass(Sidebar, [{
 	    key: 'render',
-	
-	
-	    // map through user's favorite trails and render those on page load, not all trails
-	
 	    value: function render() {
-	      var displayFavorites = (0, _lodash.map)(this.props.trailsList, function (trail) {
+	      var displayFavorites = (0, _lodash.map)(this.props.auth.favorites, function (trail) {
 	        return _react2.default.createElement(_Favorites2.default, _extends({ key: trail.uid }, trail));
 	      });
-	      console.log(this.props.trailsList);
 	      return _react2.default.createElement(
 	        'aside',
 	        { className: 'SideBar Aside Aside-1' },
@@ -53987,7 +54040,11 @@
 	          { className: 'SideTitle' },
 	          'Favorite Hikes'
 	        ),
-	        displayFavorites.length ? displayFavorites : "Make some favorites"
+	        displayFavorites.length ? displayFavorites : _react2.default.createElement(
+	          'p',
+	          { className: 'FavoritesError' },
+	          'Make some favorites'
+	        )
 	      );
 	    }
 	  }]);
@@ -54001,7 +54058,7 @@
 /* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -54011,19 +54068,22 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _reactRouter = __webpack_require__(513);
 	
-	// convert to class like TrailCard
-	// reference grocery list redux repo for "starred grociers" array functionality
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Favorites = function Favorites(trail) {
 	  return _react2.default.createElement(
-	    "section",
-	    { className: "Favorites" },
+	    'section',
+	    { className: 'Favorites' },
 	    _react2.default.createElement(
-	      "p",
-	      { className: "FavoriteTitle" },
-	      trail.title
+	      _reactRouter.Link,
+	      { to: '/Trail/' + trail.title },
+	      _react2.default.createElement(
+	        'p',
+	        { className: 'FavoriteTitle' },
+	        trail.title
+	      )
 	    )
 	  );
 	};
@@ -54598,17 +54658,24 @@
 	
 	var _index = __webpack_require__(552);
 	
+	var _auth = __webpack_require__(512);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    trailList: state.trails.data,
-	    selectedTrail: state.trails.selectedTrail
+	    selectedTrail: state.trails.selectedTrail,
+	    userId: state.auth.uid,
+	    favorites: state.auth.favorites
 	  };
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return (0, _redux.bindActionCreators)({ fetchTrail: _index.fetchTrail }, dispatch);
+	  return (0, _redux.bindActionCreators)({
+	    fetchTrail: _index.fetchTrail,
+	    starTrail: _auth.starTrail
+	  }, dispatch);
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TrailDetails2.default);
@@ -54635,6 +54702,10 @@
 	
 	var _DisplayMap2 = _interopRequireDefault(_DisplayMap);
 	
+	var _auth = __webpack_require__(512);
+	
+	var _auth2 = _interopRequireDefault(_auth);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -54657,6 +54728,11 @@
 	    value: function render() {
 	      var _this2 = this;
 	
+	      var _props = this.props;
+	      var starTrail = _props.starTrail;
+	      var userId = _props.userId;
+	      var favorites = _props.favorites;
+	
 	      var currentTrailData = (0, _lodash.find)(this.props.trailList, function (trail) {
 	        return trail.uid === _this2.props.selectedTrail;
 	      });
@@ -54672,6 +54748,16 @@
 	            'h1',
 	            { className: 'DetailTitle' },
 	            currentTrailData.title
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              onClick: function onClick(e) {
+	                return starTrail(userId, favorites, currentTrailData);
+	              },
+	              className: 'FavoriteButton'
+	            },
+	            'Make Favorite'
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -54888,7 +54974,7 @@
 	
 	
 	// module
-	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding: 5px 0 5px 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderLinks {\n  display: flex;\n  flex-direction: column;\n  margin-left: auto;\n  padding-right: 10px; }\n  @media screen and (min-width: 700px) {\n    .HeaderLinks {\n      padding-right: 20px;\n      flex-direction: row; } }\n\n.NewIcon {\n  color: white;\n  margin-bottom: 10px; }\n  @media screen and (min-width: 700px) {\n    .NewIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.ListIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .ListIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.User {\n  color: #A2C11C;\n  margin-bottom: 5px;\n  margin-top: 3px; }\n  @media screen and (min-width: 700px) {\n    .User {\n      margin-bottom: 10px; } }\n\n.AuthButton {\n  height: 30px;\n  width: 90px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .AuthButton:hover {\n    border: 1px solid #A2C11C; }\n\n.DashboardView {\n  display: flex;\n  flex-flow: row wrap; }\n\n.Dashboard {\n  flex: none;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .Dashboard {\n      flex: 3;\n      height: 80vh; } }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  height: 83vh;\n  text-align: center; }\n\n.MtnIcon {\n  height: 40px;\n  width: 40px;\n  margin-top: 15px; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 20px 0;\n  font-size: 2.5em; }\n\n.FavoriteTitle {\n  color: white;\n  font-size: 1.5em;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipSearch {\n  display: inline-flex;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipInputs {\n  margin: 0 5px 0 5px; }\n\n.DashMain {\n  flex: 2; }\n\n.NatureQuote {\n  line-height: 20px;\n  margin: auto;\n  margin-bottom: 10px;\n  margin-top: 10px;\n  width: 85%;\n  background: #2C5D63;\n  border-radius: 5px;\n  color: white;\n  padding: 10px; }\n\n.MainMap {\n  margin: auto;\n  margin-top: 10px;\n  margin-bottom: 20px; }\n\n.ForecastCurrent {\n  margin: auto;\n  padding: 10px;\n  width: 90%; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 10px 20px; }\n\n.InputArea {\n  align-items: center;\n  display: flex;\n  width: 95%;\n  margin: auto;\n  margin-top: 40px;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .InputArea {\n      align-items: flex-start;\n      flex-direction: row; } }\n\n.NewTrailForm {\n  flex-direction: column;\n  align-items: flex-start; }\n\n.NewTrailLabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1.5em; }\n\n.NewTrailField {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1.125em;\n  width: 300px; }\n\n.NewTrailLabel,\n.NewTrailField {\n  float: right;\n  margin-right: 50px; }\n\n.Buttons {\n  display: flex;\n  flex-direction: column;\n  margin-right: 175px;\n  margin-top: 300px; }\n\n.SaveButton,\n.CancelButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  float: right;\n  height: 30px;\n  width: 65px;\n  margin-bottom: 5px;\n  text-align: center; }\n  .SaveButton:hover,\n  .CancelButton:hover {\n    color: #A2C11C; }\n  @media screen and (min-width: 1100px) {\n    .SaveButton,\n    .CancelButton {\n      float: none; } }\n\n.RightSide {\n  display: flex;\n  flex-direction: column;\n  border-top: 2px solid black;\n  padding-top: 20px; }\n  @media screen and (min-width: 1100px) {\n    .RightSide {\n      border: none;\n      padding-top: 0; } }\n\n.Ranking {\n  display: inline-flex;\n  margin-bottom: 10px; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px;\n  border: 1px solid #2C5D63; }\n\n.MarkerButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  margin: 5px 0 20px 0;\n  height: 30px;\n  width: 125px; }\n\n.TrailList {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  margin: 30px 50px 0 50px; }\n\n.TrailCard {\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #0C273D;\n  background-color: white;\n  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);\n  height: 300px;\n  width: 350px;\n  margin-bottom: 40px; }\n  .TrailCard:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n\n.CardLink {\n  text-decoration: none;\n  font-weight: bold;\n  color: black; }\n\n.TrailImg {\n  height: 170px;\n  overflow: hidden;\n  opacity: 1;\n  width: 100%;\n  background: #2C5E2E;\n  height: 170px; }\n\n.TopContainer {\n  display: flex; }\n\n.CardTitle,\n.CardMiles {\n  display: inline-block;\n  line-height: 1.5em;\n  font-size: 125%;\n  text-align: left;\n  padding-left: 5px;\n  margin-top: 5px; }\n\n.CardMiles {\n  margin-left: auto;\n  padding-right: 5px; }\n\n.CardDesc {\n  font-size: 0.9em;\n  line-height: 1.5em;\n  padding: 0 5px 5px 5px; }\n\n.TrailDetail {\n  display: flex;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .TrailDetail {\n      flex-direction: none; } }\n\n.MtnIconDetail {\n  display: inline-block;\n  background: none;\n  height: 40px;\n  width: 40px;\n  margin-top: 15px;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .MtnIconDetail {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.DetailTitle {\n  display: inline-block;\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 20px 30px; }\n  @media screen and (min-width: 1100px) {\n    .DetailTitle {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.FullContainer {\n  display: flex;\n  flex-direction: column;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .FullContainer {\n      flex-direction: row; } }\n\n.LeftContainer {\n  display: flex;\n  flex-direction: column; }\n\n.DetailImg {\n  border: 10px solid #2C5D63;\n  width: 460px;\n  height: 288px; }\n\n.DetailDesc {\n  font-size: 18px;\n  line-height: 24px;\n  margin: 10px 0;\n  width: 600px; }\n\n.divider {\n  border: 2px solid #2C5D63;\n  width: 480px; }\n\n.DetailNotes {\n  margin-top: 5px; }\n\n.bold {\n  font-weight: bold; }\n\n.RightContainer {\n  display: flex;\n  flex-direction: column;\n  background: #2C5D63;\n  border: 5px solid #283739;\n  margin-top: 30px;\n  padding: 10px;\n  width: 450px; }\n  @media screen and (min-width: 1100px) {\n    .RightContainer {\n      margin-left: 8vw;\n      margin-top: 0; } }\n\n.InfoTitle {\n  color: white;\n  font-size: 36px; }\n\n.DetailMiles,\n.DetailElev {\n  color: white;\n  font-size: 18px;\n  line-height: 24px;\n  margin: 5px 0; }\n\n.DisplayMap {\n  margin: auto; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding: 5px 0 5px 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderLinks {\n  display: flex;\n  flex-direction: column;\n  margin-left: auto;\n  padding-right: 10px; }\n  @media screen and (min-width: 700px) {\n    .HeaderLinks {\n      padding-right: 20px;\n      flex-direction: row; } }\n\n.NewIcon {\n  color: white;\n  margin-bottom: 10px; }\n  @media screen and (min-width: 700px) {\n    .NewIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.ListIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .ListIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.User {\n  color: #A2C11C;\n  margin-bottom: 5px;\n  margin-top: 3px; }\n  @media screen and (min-width: 700px) {\n    .User {\n      margin-bottom: 10px; } }\n\n.AuthButton {\n  height: 30px;\n  width: 90px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .AuthButton:hover {\n    border: 2px solid #A2C11C; }\n\n.DashboardView {\n  display: flex;\n  flex-flow: row wrap; }\n\n.Dashboard {\n  flex: none;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .Dashboard {\n      flex: 3;\n      height: 80vh; } }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  padding-bottom: 20px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .SideBar {\n      height: 83vh; } }\n\n.MtnIcon {\n  height: 40px;\n  width: 40px;\n  margin-top: 15px; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 20px 0;\n  font-size: 2.5em; }\n\n.FavoriteTitle {\n  color: white;\n  font-size: 1.5em;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.FavoritesError {\n  color: white; }\n\n.ZipSearch {\n  display: inline-flex;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipInputs {\n  margin: 0 5px 0 5px; }\n\n.DashMain {\n  flex: 2; }\n\n.NatureQuote {\n  line-height: 20px;\n  margin: auto;\n  margin-bottom: 10px;\n  margin-top: 10px;\n  width: 85%;\n  background: #2C5D63;\n  border-radius: 5px;\n  color: white;\n  padding: 10px; }\n\n.MainMap {\n  margin: auto;\n  margin-top: 10px;\n  margin-bottom: 20px; }\n\n.ForecastCurrent {\n  margin: auto;\n  padding: 10px;\n  width: 90%; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 10px 20px; }\n\n.InputArea {\n  align-items: center;\n  display: flex;\n  width: 95%;\n  margin: auto;\n  margin-top: 40px;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .InputArea {\n      align-items: flex-start;\n      flex-direction: row; } }\n\n.NewTrailForm {\n  flex-direction: column;\n  align-items: flex-start; }\n\n.NewTrailLabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1.5em; }\n\n.NewTrailField {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1.125em;\n  width: 300px; }\n\n.NewTrailLabel,\n.NewTrailField {\n  float: right;\n  margin-right: 50px; }\n\n.Buttons {\n  display: flex;\n  flex-direction: column;\n  margin-right: 175px;\n  margin-top: 300px; }\n\n.SaveButton,\n.CancelButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  float: right;\n  height: 30px;\n  width: 65px;\n  margin-bottom: 5px;\n  text-align: center; }\n  .SaveButton:hover,\n  .CancelButton:hover {\n    color: #A2C11C; }\n  @media screen and (min-width: 1100px) {\n    .SaveButton,\n    .CancelButton {\n      float: none; } }\n\n.RightSide {\n  display: flex;\n  flex-direction: column;\n  border-top: 2px solid black;\n  padding-top: 20px; }\n  @media screen and (min-width: 1100px) {\n    .RightSide {\n      border: none;\n      padding-top: 0; } }\n\n.Ranking {\n  display: inline-flex;\n  margin-bottom: 10px; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px;\n  border: 1px solid #2C5D63; }\n\n.MarkerButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  margin: 5px 0 20px 0;\n  height: 30px;\n  width: 125px; }\n\n.TrailList {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  margin: 30px 50px 0 50px; }\n\n.TrailCard {\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #0C273D;\n  background-color: white;\n  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);\n  height: 300px;\n  width: 350px;\n  margin-bottom: 40px; }\n  .TrailCard:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n\n.CardLink {\n  text-decoration: none;\n  font-weight: bold;\n  color: black; }\n\n.TrailImg {\n  height: 170px;\n  overflow: hidden;\n  opacity: 1;\n  width: 100%;\n  background: #2C5E2E;\n  height: 170px; }\n\n.TopContainer {\n  display: flex; }\n\n.CardTitle,\n.CardMiles {\n  display: inline-block;\n  line-height: 1.5em;\n  font-size: 125%;\n  text-align: left;\n  padding-left: 5px;\n  margin-top: 5px; }\n\n.CardMiles {\n  margin-left: auto;\n  padding-right: 5px; }\n\n.CardDesc {\n  font-size: 0.9em;\n  line-height: 1.5em;\n  padding: 0 5px 5px 5px; }\n\n.TrailDetail {\n  display: flex;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .TrailDetail {\n      flex-direction: none; } }\n\n.TitleContainer {\n  display: flex;\n  align-items: center; }\n\n.MtnIconDetail {\n  display: inline-flex;\n  background: none;\n  height: 40px;\n  width: 40px;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .MtnIconDetail {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.DetailTitle {\n  display: inline-flex;\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 20px 30px; }\n  @media screen and (min-width: 1100px) {\n    .DetailTitle {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.FavoriteButton {\n  display: inline-flex;\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  height: 50px;\n  width: 90px;\n  margin-left: 40px;\n  padding: 5px; }\n  .FavoriteButton:hover {\n    background: #A2C11C;\n    border: 2px solid #2C5D63;\n    color: #283739; }\n\n.FullContainer {\n  display: flex;\n  flex-direction: column;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .FullContainer {\n      flex-direction: row; } }\n\n.LeftContainer {\n  display: flex;\n  flex-direction: column; }\n\n.DetailImg {\n  border: 10px solid #2C5D63;\n  width: 460px;\n  height: 288px; }\n\n.DetailDesc {\n  font-size: 18px;\n  line-height: 24px;\n  margin: 10px 0;\n  width: 600px; }\n\n.divider {\n  border: 2px solid #2C5D63;\n  width: 480px; }\n\n.DetailNotes {\n  margin-top: 5px; }\n\n.bold {\n  font-weight: bold; }\n\n.RightContainer {\n  display: flex;\n  flex-direction: column;\n  background: #2C5D63;\n  border: 5px solid #283739;\n  margin-top: 30px;\n  padding: 10px;\n  width: 450px; }\n  @media screen and (min-width: 1100px) {\n    .RightContainer {\n      margin-left: 8vw;\n      margin-top: 0; } }\n\n.InfoTitle {\n  color: white;\n  font-size: 36px; }\n\n.DetailMiles,\n.DetailElev {\n  color: white;\n  font-size: 18px;\n  line-height: 24px;\n  margin: 5px 0; }\n\n.DisplayMap {\n  margin: auto; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
 	
 	// exports
 
