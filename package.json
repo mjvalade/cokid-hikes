@@ -1,12 +1,15 @@
 {
   "name": "cokid-hikes",
   "version": "1.0.0",
-  "description": "Personal project for Turing School Mod 3. A web application to search and keep track of hiking trails in Colorado that a re kid-friendly.",
+  "description": "Personal project for Turing School Mod 3. A web application to search and keep track of hiking trails in Colorado that are kid-friendly.",
   "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "start": "webpack-dev-server --hot --inline",
     "build": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers js:babel-register --require test/helpers/setup.js --recursive"
   },
   "author": "MaryJane Valade",
   "license": "MIT",
