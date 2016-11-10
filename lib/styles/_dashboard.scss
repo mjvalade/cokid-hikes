@@ -15,8 +15,8 @@
 }
 
 .SideBar {
-  flex: 1;
   background: #2C5D63;
+  flex: 1;
   padding-bottom: 20px;
   text-align: center;
   @media screen and (min-width: 900px) {
@@ -33,66 +33,45 @@
 .SideTitle {
   color: #A2C11C;
   font-family: $header-font;
-  margin: 20px 0;
   font-size: 2.5em;
+  margin: 20px 0;
 }
 
 .FavoriteTitle {
   color: white;
   font-size: 1.5em;
-  margin-top: 10px;
   margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .FavoritesError {
   color: white;
 }
 
-.ZipSearch {
-  display: inline-flex;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  // float: left;
-  // flex: 1;
-  // height: 100%;
-  // text-align: center;
-}
-
-.ZipInputs {
-  margin: 0 5px 0 5px;
-}
-
 .DashMain {
-  // border: 1px dashed grey;
-  // display: flex;
   flex: 2;
 }
 
 .NatureQuote {
+  background: #2C5D63;
+  border-radius: 5px;
+  color: white;
   line-height: 20px;
   margin: auto;
   margin-bottom: 10px;
   margin-top: 10px;
-  width: 85%;
-  background: #2C5D63;
-  border-radius: 5px;
-  color: white;
   padding: 10px;
+  width: 85%;
 
 }
 
 .MainMap {
   margin: auto;
-  margin-top: 10px;
   margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .ForecastCurrent {
-  // background: #2C5D63;
-  // border-radius: 5px;
-  // color: white;
-
-  // display: flex;
   margin: auto;
   padding: 10px;
   width: 90%;
