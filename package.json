@@ -9,7 +9,7 @@
   "scripts": {
     "start": "webpack-dev-server --hot --inline",
     "build": "webpack",
-    "test": "jest mocha --compilers js:babel-register --require test/helpers/setup.js --recursive"
+    "test": "jest"
   },
   "author": "MaryJane Valade",
   "license": "MIT",
