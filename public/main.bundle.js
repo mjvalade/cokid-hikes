@@ -36207,14 +36207,19 @@
 	};
 	
 	var weatherKey = 'f4c4b366ab190a9052d740dd5d8fea64';
+	var darkSkyKey = 'df1cb83c0c16ed9704c292d285314cd0';
+	
+	// dark sky call https://api.darksky.net/forecast/df1cb83c0c16ed9704c292d285314cd0/{lat},{long};
 	
 	var fetchLocalWeather = function fetchLocalWeather(position) {
 	  var lat = position.coords.latitude;
 	  var long = position.coords.longitude;
-	  var weatherURLbyCoords = 'http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + long + '&units=imperial&appid=' + weatherKey;
+	  var weatherURLbyCoords = '/{lat},{long}';
+	
+	  //  let weatherURLbyCoords = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=imperial&appid=${weatherKey}`;
 	
 	  return function (dispatch) {
-	    return (0, _isomorphicFetch2.default)(weatherURLbyCoords).then(function (response) {
+	    return (0, _isomorphicFetch2.default)('https://api.darksky.net/forecast/df1cb83c0c16ed9704c292d285314cd0/39.754185,-105.230484').then(function (response) {
 	      return response.json();
 	    }).then(function (jsonResponse) {
 	      return dispatch(receiveCurrentLocalWeather(jsonResponse));
@@ -36750,25 +36755,6 @@
 	          'p',
 	          null,
 	          '\u2013 Thomas Berry'
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'article',
-	        { className: 'ForecastCurrent' },
-	        Object.keys(weather).length ? _react2.default.createElement(
-	          'p',
-	          null,
-	          'Current forecast for ',
-	          weather.name,
-	          ': ',
-	          weather.weather[0].main,
-	          ' ',
-	          Math.round(weather.main.temp),
-	          '\u2109'
-	        ) : _react2.default.createElement(
-	          'p',
-	          null,
-	          'Fetching Local Weather ...'
 	        )
 	      ),
 	      _react2.default.createElement(_MainMap2.default, { trails: allTrails.data })
