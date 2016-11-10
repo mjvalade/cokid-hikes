@@ -6,4 +6,4 @@ describe('our test bundle', () => {
   it('should work', () => {
     assert(true);
   });
-  });
+});
