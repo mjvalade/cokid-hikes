@@ -36083,6 +36083,7 @@
 	      }
 	      navigator.geolocation.getCurrentPosition(function (position) {
 	        _this2.props.fetchLocalWeather(position);
+	        console.log('lat/long', position);
 	      });
 	    }
 	  }, {
@@ -36191,12 +36192,12 @@
 	  };
 	};
 	
-	var starTrail = function starTrail(uid) {
-	  return {
-	    type: 'STAR_TRAIL',
-	    uid: uid
-	  };
-	};
+	// const starTrail = (uid) => {
+	//   return {
+	//     type: 'STAR_TRAIL',
+	//     uid: uid
+	//   };
+	// };
 	
 	var receiveCurrentLocalWeather = function receiveCurrentLocalWeather(json) {
 	  return {
@@ -53997,7 +53998,7 @@
 	      return _react2.default.createElement(
 	        'aside',
 	        { className: 'SideBar Aside Aside-1' },
-	        _react2.default.createElement('img', { src: '../public/assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
+	        _react2.default.createElement('img', { src: './assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
 	        _react2.default.createElement(
 	          'h2',
 	          { className: 'SideTitle' },
@@ -54569,7 +54570,7 @@
 	            _this2.goToDetails();
 	          }
 	        },
-	        _react2.default.createElement("img", { src: "../public/assets/mountains-card.png", alt: "landscape", className: "TrailImg" }),
+	        _react2.default.createElement("img", { src: "./assets/mountains-card.png", alt: "landscape", className: "TrailImg" }),
 	        _react2.default.createElement(
 	          "section",
 	          { className: "TopContainer" },
@@ -54698,7 +54699,7 @@
 	        _react2.default.createElement(
 	          'section',
 	          { className: 'TitleContainer' },
-	          _react2.default.createElement('img', { src: '../../public/assets/mountains-icon.png', alt: 'landscape', className: 'MtnIconDetail' }),
+	          _react2.default.createElement('img', { src: './assets/mountains-icon.png', alt: 'landscape', className: 'MtnIconDetail' }),
 	          _react2.default.createElement(
 	            'h1',
 	            { className: 'DetailTitle' },
