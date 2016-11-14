@@ -8236,7 +8236,7 @@
 	  { store: _store2.default },
 	  _react2.default.createElement(
 	    _reactRouter.BrowserRouter,
-	    { basename: '/public' },
+	    null,
 	    _react2.default.createElement(
 	      'div',
 	      null,
