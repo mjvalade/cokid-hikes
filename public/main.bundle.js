@@ -54642,7 +54642,7 @@
 	        _react2.default.createElement(
 	          'section',
 	          { className: 'TitleContainer' },
-	          _react2.default.createElement('img', { src: '../assets/mountains-icon.png', alt: 'landscape', className: 'MtnIconDetail' }),
+	          _react2.default.createElement('img', { src: './assets/mountains-icon.png', alt: 'landscape', className: 'MtnIconDetail' }),
 	          _react2.default.createElement(
 	            'h1',
 	            { className: 'DetailTitle' },
@@ -54655,7 +54655,7 @@
 	          _react2.default.createElement(
 	            'section',
 	            { className: 'LeftContainer' },
-	            _react2.default.createElement('img', { src: '../../public/assets/mountains-card.png', alt: 'landscape', className: 'DetailImg' }),
+	            _react2.default.createElement('img', { src: './assets/mountains-card.png', alt: 'landscape', className: 'DetailImg' }),
 	            _react2.default.createElement(
 	              'p',
 	              { className: 'DetailDesc' },
