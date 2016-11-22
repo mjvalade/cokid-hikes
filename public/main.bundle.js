@@ -8236,7 +8236,7 @@
 	  { store: _store2.default },
 	  _react2.default.createElement(
 	    _reactRouter.BrowserRouter,
-	    { basename: '/public' },
+	    null,
 	    _react2.default.createElement(
 	      'div',
 	      null,
@@ -36156,7 +36156,7 @@
 	    value: function componentDidMount() {
 	      this.props.fetchAllTrails();
 	      this.props.fetchFavoriteTrails();
-	      this.findUserCoords();
+	      // this.findUserCoords();
 	    }
 	  }, {
 	    key: 'render',
@@ -36792,25 +36792,6 @@
 	          'p',
 	          null,
 	          '\u2013 Thomas Berry'
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'article',
-	        { className: 'ForecastCurrent' },
-	        Object.keys(weather).length ? _react2.default.createElement(
-	          'p',
-	          null,
-	          'Current forecast for ',
-	          weather.name,
-	          ': ',
-	          weather.weather[0].main,
-	          ' ',
-	          Math.round(weather.main.temp),
-	          '\u2109'
-	        ) : _react2.default.createElement(
-	          'p',
-	          null,
-	          'Fetching Local Weather ...'
 	        )
 	      ),
 	      _react2.default.createElement(_MainMap2.default, { trails: allTrails.data })
@@ -54087,7 +54068,7 @@
 	      return _react2.default.createElement(
 	        'aside',
 	        { className: 'SideBar Aside Aside-1' },
-	        _react2.default.createElement('img', { src: '../public/assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
+	        _react2.default.createElement('img', { src: '../assets/mountains-icon.png', alt: 'landscape', className: 'MtnIcon' }),
 	        _react2.default.createElement(
 	          'h2',
 	          { className: 'SideTitle' },
@@ -54606,7 +54587,7 @@
 	            _this2.goToDetails();
 	          }
 	        },
-	        _react2.default.createElement('img', { src: './assets/mountains-card.png', alt: 'landscape', className: 'TrailImg' }),
+	        _react2.default.createElement('img', { src: '../assets/mountains-card.png', alt: 'landscape', className: 'TrailImg' }),
 	        _react2.default.createElement(
 	          'section',
 	          { className: 'TopContainer' },
@@ -54747,7 +54728,7 @@
 	        _react2.default.createElement(
 	          'section',
 	          { className: 'TitleContainer' },
-	          _react2.default.createElement('img', { src: '../../public/assets/mountains-icon.png', alt: 'landscape', className: 'MtnIconDetail' }),
+	          _react2.default.createElement('img', { src: '../assets/mountains-icon.png', alt: 'landscape', className: 'MtnIconDetail' }),
 	          _react2.default.createElement(
 	            'h1',
 	            { className: 'DetailTitle' },
@@ -54770,7 +54751,7 @@
 	          _react2.default.createElement(
 	            'section',
 	            { className: 'LeftContainer' },
-	            _react2.default.createElement('img', { src: './assets/mountains-card.png', alt: 'landscape', className: 'DetailImg' }),
+	            _react2.default.createElement('img', { src: '../assets/mountains-card.png', alt: 'landscape', className: 'DetailImg' }),
 	            _react2.default.createElement(
 	              'p',
 	              { className: 'DetailDesc' },
