@@ -34,7 +34,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/public/";
+/******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
@@ -8199,29 +8199,29 @@
 	
 	var actions = _interopRequireWildcard(_auth);
 	
-	var _reactRouter = __webpack_require__(513);
+	var _reactRouter = __webpack_require__(514);
 	
-	var _Header = __webpack_require__(549);
+	var _Header = __webpack_require__(550);
 	
 	var _Header2 = _interopRequireDefault(_Header);
 	
-	var _Application = __webpack_require__(551);
+	var _Application = __webpack_require__(552);
 	
 	var _Application2 = _interopRequireDefault(_Application);
 	
-	var _NewTrailContainer = __webpack_require__(562);
+	var _NewTrailContainer = __webpack_require__(563);
 	
 	var _NewTrailContainer2 = _interopRequireDefault(_NewTrailContainer);
 	
-	var _TrailListContainer = __webpack_require__(565);
+	var _TrailListContainer = __webpack_require__(566);
 	
 	var _TrailListContainer2 = _interopRequireDefault(_TrailListContainer);
 	
-	var _TrailDetailContainer = __webpack_require__(568);
+	var _TrailDetailContainer = __webpack_require__(569);
 	
 	var _TrailDetailContainer2 = _interopRequireDefault(_TrailDetailContainer);
 	
-	var _NoMatch = __webpack_require__(571);
+	var _NoMatch = __webpack_require__(572);
 	
 	var _NoMatch2 = _interopRequireDefault(_NoMatch);
 	
@@ -8229,7 +8229,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(572);
+	__webpack_require__(573);
 	
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRedux.Provider,
@@ -31911,20 +31911,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || _redux.compose; // import { createStore, applyMiddleware, combineReducers } from 'redux';
-	// import thunk from 'redux-thunk';
-	//
-	// import authReducer from './reducers/auth-reducer';
-	// import initialState from './initialState';
-	//
-	// export default createStore(
-	//   combineReducers({
-	//     auth: authReducer,
-	//   }),
-	//   initialState,
-	//   applyMiddleware(thunk)
-	// );
-	
+	var composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || _redux.compose;
 	
 	exports.default = (0, _redux.createStore)(_rootReducer2.default, {}, composeEnhancers((0, _redux.applyMiddleware)(_reduxThunk2.default)));
 
@@ -32040,14 +32027,16 @@
 	
 	    case 'RECEIVE_FAVORITES':
 	      var favesData = state;
-	      if (action.auth.favorites.length) {
-	        console.log(action.auth.favorites);
+	      if (state.favorites.length) {
+	        console.log('favorites list', state.favorites);
 	      }
 	      return favesData;
 	
 	    default:
 	      return state;
 	  }
+	  console.log('action.favorites', action.favorites);
+	  console.log('action.state.favorites', action.state.favorites);
 	}
 
 /***/ },
@@ -32149,26 +32138,18 @@
 /* 512 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports.fetchFavoriteTrails = exports.starTrail = exports.logOut = exports.logIn = exports.startListeningToAuth = undefined;
 	
-	var _firebase = __webpack_require__(499);
+	var _firebase = __webpack_require__(513);
 	
 	var _firebase2 = _interopRequireDefault(_firebase);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var firebaseApp = _firebase2.default.initializeApp({
-	  apiKey: "AIzaSyAjWOGb8Tl-WWTxDRtRDud4ot4ojzVuGFU",
-	  authDomain: "co-kid-hikes.firebaseapp.com",
-	  databaseURL: "https://co-kid-hikes.firebaseio.com",
-	  storageBucket: "co-kid-hikes.appspot.com",
-	  messagingSenderId: "548128761061"
-	});
 	
 	var google = new _firebase2.default.auth.GoogleAuthProvider();
 	
@@ -32176,11 +32157,19 @@
 	  return function (dispatch, getState) {
 	    _firebase2.default.auth().onAuthStateChanged(function (authData) {
 	      if (authData) {
-	        dispatch({
-	          type: 'LOGIN',
-	          uid: authData.uid,
-	          username: authData.displayName,
-	          favorites: authData.favorites
+	        _firebase.firebaseUsers.child(authData.uid).once('value').then(function (result) {
+	          var trailFavorites = result.val().favorites;
+	          // result.forEach(user => {
+	          //   console.log('user result', user);
+	          console.log('result.val', result.val().favorites);
+	          dispatch({
+	            type: 'LOGIN',
+	            uid: authData.uid,
+	            username: authData.displayName,
+	            favorites: trailFavorites,
+	            userId: authData.userId
+	          });
+	          // });
 	        });
 	      } else {
 	        if (getState().auth.status !== 'ANONYMOUS') {
@@ -32204,7 +32193,8 @@
 	        type: 'LOGIN',
 	        uid: result.user.uid,
 	        username: result.user.displayName,
-	        favorites: result.user.favorites
+	        favorites: result.user.favorites,
+	        userId: result.user.userId
 	      });
 	    }).catch(function (error) {
 	      console.log('Error logging in: ', error);
@@ -32225,28 +32215,29 @@
 	}
 	
 	function starTrail(userId, favorites, trailData) {
-	  var firebaseFaves = _firebase2.default.database().ref('users/' + userId);
+	  console.log('userId', userId, arguments);
 	  return function (dispatch) {
-	    firebaseFaves.set({
-	      starredTrails: favorites
+	    _firebase.firebaseUsers.child(userId).set({
+	      favorites: favorites.concat([trailData.uid])
 	    }).then(function () {
-	      console.log('firebase save');
+	      console.log('FAVORITES UPDATED');
 	      dispatch({
 	        type: 'STAR_TRAIL',
-	        trail: trailData
+	        trail: trailData.uid
 	      });
+	    }).catch(function (e) {
+	      return console.log(e);
 	    });
 	  };
 	}
 	
-	// function to fetch Favorite Trails and call in App/componentDidMount
-	
 	function fetchFavoriteTrails(userId) {
-	  var firebaseFaves = _firebase2.default.database().ref('users/' + userId);
+	  var firebaseUsersId = _firebase2.default.database().ref('users/' + userId);
+	
 	  return function (dispatch) {
 	    var fetchedFaves = [];
 	
-	    firebaseFaves.once('value').then(function (result) {
+	    firebaseUsersId.once('value').then(function (result) {
 	      result.forEach(function (faves) {
 	        fetchedFaves.push(faves.val());
 	      });
@@ -32268,56 +32259,89 @@
 /* 513 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.firebaseTrails = exports.firebaseUsers = undefined;
+	
+	var _firebase = __webpack_require__(499);
+	
+	var _firebase2 = _interopRequireDefault(_firebase);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var config = {
+	  apiKey: "AIzaSyAjWOGb8Tl-WWTxDRtRDud4ot4ojzVuGFU",
+	  authDomain: "co-kid-hikes.firebaseapp.com",
+	  databaseURL: "https://co-kid-hikes.firebaseio.com",
+	  storageBucket: "co-kid-hikes.appspot.com",
+	  messagingSenderId: "548128761061"
+	};
+	
+	_firebase2.default.initializeApp(config);
+	
+	// const google = new firebase.auth.GoogleAuthProvider();
+	var firebaseUsers = exports.firebaseUsers = _firebase2.default.database().ref('trailUsers');
+	var firebaseTrails = exports.firebaseTrails = _firebase2.default.database().ref('trails');
+	
+	exports.default = _firebase2.default;
+
+/***/ },
+/* 514 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	exports.__esModule = true;
 	exports.createServerRenderContext = exports.matchPattern = exports.StaticRouter = exports.ServerRouter = exports.MemoryRouter = exports.HashRouter = exports.BrowserRouter = exports.Redirect = exports.NavigationPrompt = exports.Miss = exports.Match = exports.Link = undefined;
 	
-	var _Link2 = __webpack_require__(514);
+	var _Link2 = __webpack_require__(515);
 	
 	var _Link3 = _interopRequireDefault(_Link2);
 	
-	var _Match2 = __webpack_require__(516);
+	var _Match2 = __webpack_require__(517);
 	
 	var _Match3 = _interopRequireDefault(_Match2);
 	
-	var _Miss2 = __webpack_require__(521);
+	var _Miss2 = __webpack_require__(522);
 	
 	var _Miss3 = _interopRequireDefault(_Miss2);
 	
-	var _Prompt = __webpack_require__(522);
+	var _Prompt = __webpack_require__(523);
 	
 	var _Prompt2 = _interopRequireDefault(_Prompt);
 	
-	var _Redirect2 = __webpack_require__(524);
+	var _Redirect2 = __webpack_require__(525);
 	
 	var _Redirect3 = _interopRequireDefault(_Redirect2);
 	
-	var _BrowserRouter2 = __webpack_require__(525);
+	var _BrowserRouter2 = __webpack_require__(526);
 	
 	var _BrowserRouter3 = _interopRequireDefault(_BrowserRouter2);
 	
-	var _HashRouter2 = __webpack_require__(541);
+	var _HashRouter2 = __webpack_require__(542);
 	
 	var _HashRouter3 = _interopRequireDefault(_HashRouter2);
 	
-	var _MemoryRouter2 = __webpack_require__(544);
+	var _MemoryRouter2 = __webpack_require__(545);
 	
 	var _MemoryRouter3 = _interopRequireDefault(_MemoryRouter2);
 	
-	var _ServerRouter2 = __webpack_require__(547);
+	var _ServerRouter2 = __webpack_require__(548);
 	
 	var _ServerRouter3 = _interopRequireDefault(_ServerRouter2);
 	
-	var _StaticRouter2 = __webpack_require__(536);
+	var _StaticRouter2 = __webpack_require__(537);
 	
 	var _StaticRouter3 = _interopRequireDefault(_StaticRouter2);
 	
-	var _matchPattern2 = __webpack_require__(518);
+	var _matchPattern2 = __webpack_require__(519);
 	
 	var _matchPattern3 = _interopRequireDefault(_matchPattern2);
 	
-	var _createServerRenderContext2 = __webpack_require__(548);
+	var _createServerRenderContext2 = __webpack_require__(549);
 	
 	var _createServerRenderContext3 = _interopRequireDefault(_createServerRenderContext2);
 	
@@ -32349,7 +32373,7 @@
 	exports.createServerRenderContext = _createServerRenderContext3.default;
 
 /***/ },
-/* 514 */
+/* 515 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32364,7 +32388,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(515);
+	var _PropTypes = __webpack_require__(516);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -32541,7 +32565,7 @@
 	exports.default = Link;
 
 /***/ },
-/* 515 */
+/* 516 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32588,7 +32612,7 @@
 	});
 
 /***/ },
-/* 516 */
+/* 517 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32601,11 +32625,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _MatchProvider = __webpack_require__(517);
+	var _MatchProvider = __webpack_require__(518);
 	
 	var _MatchProvider2 = _interopRequireDefault(_MatchProvider);
 	
-	var _matchPattern = __webpack_require__(518);
+	var _matchPattern = __webpack_require__(519);
 	
 	var _matchPattern2 = _interopRequireDefault(_matchPattern);
 	
@@ -32742,7 +32766,7 @@
 	exports.default = Match;
 
 /***/ },
-/* 517 */
+/* 518 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32753,7 +32777,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(515);
+	var _PropTypes = __webpack_require__(516);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -32862,14 +32886,14 @@
 	exports.default = MatchProvider;
 
 /***/ },
-/* 518 */
+/* 519 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _pathToRegexp = __webpack_require__(519);
+	var _pathToRegexp = __webpack_require__(520);
 	
 	var _pathToRegexp2 = _interopRequireDefault(_pathToRegexp);
 	
@@ -32933,10 +32957,10 @@
 	exports.default = matchPattern;
 
 /***/ },
-/* 519 */
+/* 520 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isarray = __webpack_require__(520)
+	var isarray = __webpack_require__(521)
 	
 	/**
 	 * Expose `pathToRegexp`.
@@ -33364,7 +33388,7 @@
 
 
 /***/ },
-/* 520 */
+/* 521 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -33373,7 +33397,7 @@
 
 
 /***/ },
-/* 521 */
+/* 522 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33384,7 +33408,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(515);
+	var _PropTypes = __webpack_require__(516);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -33464,7 +33488,7 @@
 	exports.default = Miss;
 
 /***/ },
-/* 522 */
+/* 523 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33475,7 +33499,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(523);
+	var _PropTypes = __webpack_require__(524);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -33541,7 +33565,7 @@
 	exports.default = Prompt;
 
 /***/ },
-/* 523 */
+/* 524 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33574,7 +33598,7 @@
 	});
 
 /***/ },
-/* 524 */
+/* 525 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33585,7 +33609,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(515);
+	var _PropTypes = __webpack_require__(516);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -33636,7 +33660,7 @@
 	exports.default = Redirect;
 
 /***/ },
-/* 525 */
+/* 526 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33649,11 +33673,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _BrowserHistory = __webpack_require__(526);
+	var _BrowserHistory = __webpack_require__(527);
 	
 	var _BrowserHistory2 = _interopRequireDefault(_BrowserHistory);
 	
-	var _StaticRouter = __webpack_require__(536);
+	var _StaticRouter = __webpack_require__(537);
 	
 	var _StaticRouter2 = _interopRequireDefault(_StaticRouter);
 	
@@ -33698,7 +33722,7 @@
 	exports.default = BrowserRouter;
 
 /***/ },
-/* 526 */
+/* 527 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33709,11 +33733,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _createBrowserHistory = __webpack_require__(527);
+	var _createBrowserHistory = __webpack_require__(528);
 	
 	var _createBrowserHistory2 = _interopRequireDefault(_createBrowserHistory);
 	
-	var _History = __webpack_require__(535);
+	var _History = __webpack_require__(536);
 	
 	var _History2 = _interopRequireDefault(_History);
 	
@@ -33744,7 +33768,7 @@
 	exports.default = BrowserHistory;
 
 /***/ },
-/* 527 */
+/* 528 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -33755,7 +33779,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _warning = __webpack_require__(528);
+	var _warning = __webpack_require__(529);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -33763,17 +33787,17 @@
 	
 	var _invariant2 = _interopRequireDefault(_invariant);
 	
-	var _LocationUtils = __webpack_require__(529);
+	var _LocationUtils = __webpack_require__(530);
 	
-	var _PathUtils = __webpack_require__(531);
+	var _PathUtils = __webpack_require__(532);
 	
-	var _createTransitionManager = __webpack_require__(532);
+	var _createTransitionManager = __webpack_require__(533);
 	
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 	
-	var _ExecutionEnvironment = __webpack_require__(533);
+	var _ExecutionEnvironment = __webpack_require__(534);
 	
-	var _DOMUtils = __webpack_require__(534);
+	var _DOMUtils = __webpack_require__(535);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34057,7 +34081,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 528 */
+/* 529 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -34124,7 +34148,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 529 */
+/* 530 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34136,11 +34160,11 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _resolvePathname = __webpack_require__(530);
+	var _resolvePathname = __webpack_require__(531);
 	
 	var _resolvePathname2 = _interopRequireDefault(_resolvePathname);
 	
-	var _PathUtils = __webpack_require__(531);
+	var _PathUtils = __webpack_require__(532);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34218,7 +34242,7 @@
 	};
 
 /***/ },
-/* 530 */
+/* 531 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34293,7 +34317,7 @@
 	module.exports = resolvePathname;
 
 /***/ },
-/* 531 */
+/* 532 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34351,14 +34375,14 @@
 	};
 
 /***/ },
-/* 532 */
+/* 533 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
 	exports.__esModule = true;
 	
-	var _warning = __webpack_require__(528);
+	var _warning = __webpack_require__(529);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -34435,7 +34459,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 533 */
+/* 534 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34444,7 +34468,7 @@
 	var canUseDOM = exports.canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 
 /***/ },
-/* 534 */
+/* 535 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34493,7 +34517,7 @@
 	};
 
 /***/ },
-/* 535 */
+/* 536 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34504,7 +34528,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _PropTypes = __webpack_require__(523);
+	var _PropTypes = __webpack_require__(524);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34601,7 +34625,7 @@
 	exports.default = History;
 
 /***/ },
-/* 536 */
+/* 537 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34612,15 +34636,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _queryString = __webpack_require__(537);
+	var _queryString = __webpack_require__(538);
 	
-	var _LocationUtils = __webpack_require__(540);
+	var _LocationUtils = __webpack_require__(541);
 	
-	var _MatchProvider = __webpack_require__(517);
+	var _MatchProvider = __webpack_require__(518);
 	
 	var _MatchProvider2 = _interopRequireDefault(_MatchProvider);
 	
-	var _PropTypes = __webpack_require__(515);
+	var _PropTypes = __webpack_require__(516);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34731,12 +34755,12 @@
 	exports.default = StaticRouter;
 
 /***/ },
-/* 537 */
+/* 538 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var strictUriEncode = __webpack_require__(538);
-	var objectAssign = __webpack_require__(539);
+	var strictUriEncode = __webpack_require__(539);
+	var objectAssign = __webpack_require__(540);
 	
 	function encode(value, opts) {
 		if (opts.encode) {
@@ -34835,7 +34859,7 @@
 
 
 /***/ },
-/* 538 */
+/* 539 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34847,7 +34871,7 @@
 
 
 /***/ },
-/* 539 */
+/* 540 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34936,7 +34960,7 @@
 
 
 /***/ },
-/* 540 */
+/* 541 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34946,7 +34970,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _PathUtils = __webpack_require__(531);
+	var _PathUtils = __webpack_require__(532);
 	
 	var createRouterLocation = function createRouterLocation(input, parseQuery, stringifyQuery) {
 	  if (typeof input === 'string') {
@@ -34975,7 +34999,7 @@
 	exports.createRouterPath = createRouterPath;
 
 /***/ },
-/* 541 */
+/* 542 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34988,11 +35012,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _HashHistory = __webpack_require__(542);
+	var _HashHistory = __webpack_require__(543);
 	
 	var _HashHistory2 = _interopRequireDefault(_HashHistory);
 	
-	var _StaticRouter = __webpack_require__(536);
+	var _StaticRouter = __webpack_require__(537);
 	
 	var _StaticRouter2 = _interopRequireDefault(_StaticRouter);
 	
@@ -35037,7 +35061,7 @@
 	exports.default = HashRouter;
 
 /***/ },
-/* 542 */
+/* 543 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35048,11 +35072,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _createHashHistory = __webpack_require__(543);
+	var _createHashHistory = __webpack_require__(544);
 	
 	var _createHashHistory2 = _interopRequireDefault(_createHashHistory);
 	
-	var _History = __webpack_require__(535);
+	var _History = __webpack_require__(536);
 	
 	var _History2 = _interopRequireDefault(_History);
 	
@@ -35082,7 +35106,7 @@
 	exports.default = HashHistory;
 
 /***/ },
-/* 543 */
+/* 544 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -35091,7 +35115,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _warning = __webpack_require__(528);
+	var _warning = __webpack_require__(529);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -35099,17 +35123,17 @@
 	
 	var _invariant2 = _interopRequireDefault(_invariant);
 	
-	var _LocationUtils = __webpack_require__(529);
+	var _LocationUtils = __webpack_require__(530);
 	
-	var _PathUtils = __webpack_require__(531);
+	var _PathUtils = __webpack_require__(532);
 	
-	var _createTransitionManager = __webpack_require__(532);
+	var _createTransitionManager = __webpack_require__(533);
 	
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 	
-	var _ExecutionEnvironment = __webpack_require__(533);
+	var _ExecutionEnvironment = __webpack_require__(534);
 	
-	var _DOMUtils = __webpack_require__(534);
+	var _DOMUtils = __webpack_require__(535);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -35408,7 +35432,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 544 */
+/* 545 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35421,11 +35445,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _MemoryHistory = __webpack_require__(545);
+	var _MemoryHistory = __webpack_require__(546);
 	
 	var _MemoryHistory2 = _interopRequireDefault(_MemoryHistory);
 	
-	var _StaticRouter = __webpack_require__(536);
+	var _StaticRouter = __webpack_require__(537);
 	
 	var _StaticRouter2 = _interopRequireDefault(_StaticRouter);
 	
@@ -35475,7 +35499,7 @@
 	exports.default = MemoryRouter;
 
 /***/ },
-/* 545 */
+/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35486,11 +35510,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _createMemoryHistory = __webpack_require__(546);
+	var _createMemoryHistory = __webpack_require__(547);
 	
 	var _createMemoryHistory2 = _interopRequireDefault(_createMemoryHistory);
 	
-	var _History = __webpack_require__(535);
+	var _History = __webpack_require__(536);
 	
 	var _History2 = _interopRequireDefault(_History);
 	
@@ -35521,7 +35545,7 @@
 	exports.default = MemoryHistory;
 
 /***/ },
-/* 546 */
+/* 547 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -35532,13 +35556,13 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _warning = __webpack_require__(528);
+	var _warning = __webpack_require__(529);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	var _LocationUtils = __webpack_require__(529);
+	var _LocationUtils = __webpack_require__(530);
 	
-	var _createTransitionManager = __webpack_require__(532);
+	var _createTransitionManager = __webpack_require__(533);
 	
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 	
@@ -35692,7 +35716,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 547 */
+/* 548 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35705,7 +35729,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _StaticRouter = __webpack_require__(536);
+	var _StaticRouter = __webpack_require__(537);
 	
 	var _StaticRouter2 = _interopRequireDefault(_StaticRouter);
 	
@@ -35766,7 +35790,7 @@
 	exports.default = ServerRouter;
 
 /***/ },
-/* 548 */
+/* 549 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35827,7 +35851,7 @@
 	exports.default = createServerRenderContext;
 
 /***/ },
-/* 549 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35842,7 +35866,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(513);
+	var _reactRouter = __webpack_require__(514);
 	
 	var _redux = __webpack_require__(476);
 	
@@ -35852,7 +35876,7 @@
 	
 	var _firebase2 = _interopRequireDefault(_firebase);
 	
-	var _SignIn = __webpack_require__(550);
+	var _SignIn = __webpack_require__(551);
 	
 	var _SignIn2 = _interopRequireDefault(_SignIn);
 	
@@ -35882,7 +35906,6 @@
 	  _createClass(Header, [{
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.props.status);
 	      return _react2.default.createElement(
 	        'header',
 	        { className: 'MainHeader' },
@@ -35929,7 +35952,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Header);
 
 /***/ },
-/* 550 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35949,7 +35972,7 @@
 	
 	var _reactRedux = __webpack_require__(469);
 	
-	var _reactRouter = __webpack_require__(513);
+	var _reactRouter = __webpack_require__(514);
 	
 	var _auth = __webpack_require__(512);
 	
@@ -35994,7 +36017,7 @@
 	              to: '/NewTrail',
 	              className: 'NewIcon'
 	            },
-	            'ADD NEW'
+	            'ADD NEW TRAIL'
 	          ),
 	          _react2.default.createElement(
 	            'section',
@@ -36055,7 +36078,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SignIn);
 
 /***/ },
-/* 551 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36074,19 +36097,19 @@
 	
 	var _redux = __webpack_require__(476);
 	
-	var _actions = __webpack_require__(552);
+	var _actions = __webpack_require__(553);
 	
 	var _auth = __webpack_require__(512);
 	
-	var _Header = __webpack_require__(549);
+	var _Header = __webpack_require__(550);
 	
 	var _Header2 = _interopRequireDefault(_Header);
 	
-	var _DashboardContainer = __webpack_require__(555);
+	var _DashboardContainer = __webpack_require__(556);
 	
 	var _DashboardContainer2 = _interopRequireDefault(_DashboardContainer);
 	
-	var _SidebarContainer = __webpack_require__(559);
+	var _SidebarContainer = __webpack_require__(561);
 	
 	var _SidebarContainer2 = _interopRequireDefault(_SidebarContainer);
 	
@@ -36103,7 +36126,7 @@
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return (0, _redux.bindActionCreators)({ fetchLocalWeather: _actions.fetchLocalWeather, fetchAllTrails: _actions.fetchAllTrails }, dispatch);
+	  return (0, _redux.bindActionCreators)({ fetchLocalWeather: _actions.fetchLocalWeather, fetchAllTrails: _actions.fetchAllTrails, fetchFavoriteTrails: _auth.fetchFavoriteTrails }, dispatch);
 	};
 	
 	var App = function (_Component) {
@@ -36126,7 +36149,6 @@
 	      }
 	      navigator.geolocation.getCurrentPosition(function (position) {
 	        _this2.props.fetchLocalWeather(position);
-	        // console.log(position);
 	      });
 	    }
 	  }, {
@@ -36150,29 +36172,6 @@
 	        )
 	      );
 	    }
-	
-	    // trying to delay render until all data fetched so can send as props
-	
-	    // render() {
-	    //   let content;
-	    //   if (!this.props.trails) {
-	    //     content = 'Loading trails...';
-	    //   } else {
-	    //     content = (
-	    //       <div className="DashboardView">
-	    //         <SidebarContainer />
-	    //         <DashboardContainer />
-	    //       </div>
-	    //     );
-	    //   }
-	    //
-	    //   return(
-	    //     <div className="MainView">
-	    //       <p>{content}</p>
-	    //     </div>
-	    //   );
-	    // }
-	
 	  }]);
 	
 	  return App;
@@ -36181,7 +36180,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(App);
 
 /***/ },
-/* 552 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36191,24 +36190,24 @@
 	});
 	exports.fetchLocalWeather = exports.receiveCurrentLocalWeather = exports.setSelectedTrail = exports.fetchAllTrails = exports.createTrail = undefined;
 	
-	var _isomorphicFetch = __webpack_require__(553);
+	var _isomorphicFetch = __webpack_require__(554);
 	
 	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 	
-	var _firebase = __webpack_require__(499);
+	var _firebase = __webpack_require__(513);
 	
 	var _firebase2 = _interopRequireDefault(_firebase);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var firebaseTrails = _firebase2.default.database().ref('trails');
+	// const firebaseTrails = firebase.database().ref('trails');
 	
 	function createTrail(trailData) {
 	  return function (dispatch) {
 	
-	    var newTrailKey = firebaseTrails.push().key;
+	    var newTrailKey = _firebase.firebaseTrails.push().key;
 	
-	    firebaseTrails.child(newTrailKey).set(trailData).then(function () {
+	    _firebase.firebaseTrails.child(newTrailKey).set(trailData).then(function () {
 	      console.log('trailData', trailData);
 	      dispatch({
 	        type: 'CREATE_NEW_TRAIL',
@@ -36224,7 +36223,7 @@
 	  return function (dispatch) {
 	    var fetchedTrails = [];
 	
-	    firebaseTrails.once('value').then(function (result) {
+	    _firebase.firebaseTrails.once('value').then(function (result) {
 	      result.forEach(function (trail) {
 	        fetchedTrails.push(trail.val());
 	      });
@@ -36273,19 +36272,19 @@
 	exports.fetchLocalWeather = fetchLocalWeather;
 
 /***/ },
-/* 553 */
+/* 554 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// the whatwg-fetch polyfill installs the fetch() function
 	// on the global object (window or self)
 	//
 	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(554);
+	__webpack_require__(555);
 	module.exports = self.fetch.bind(self);
 
 
 /***/ },
-/* 554 */
+/* 555 */
 /***/ function(module, exports) {
 
 	(function(self) {
@@ -36724,7 +36723,7 @@
 
 
 /***/ },
-/* 555 */
+/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36735,7 +36734,7 @@
 	
 	var _reactRedux = __webpack_require__(469);
 	
-	var _Dashboard = __webpack_require__(556);
+	var _Dashboard = __webpack_require__(557);
 	
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 	
@@ -36751,7 +36750,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Dashboard2.default);
 
 /***/ },
-/* 556 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36764,7 +36763,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _MainMap = __webpack_require__(557);
+	var _MainMap = __webpack_require__(558);
 	
 	var _MainMap2 = _interopRequireDefault(_MainMap);
 	
@@ -36774,7 +36773,6 @@
 	  var weather = _ref.weather;
 	  var allTrails = _ref.allTrails;
 	
-	  console.log("all trails.data: " + allTrails.data);
 	
 	  return _react2.default.createElement(
 	    'main',
@@ -36823,7 +36821,7 @@
 	exports.default = Dashboard;
 
 /***/ },
-/* 557 */
+/* 558 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36832,13 +36830,19 @@
 	  value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(299);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _lodash = __webpack_require__(558);
+	var _lodash = __webpack_require__(559);
+	
+	var _Favorites = __webpack_require__(560);
+	
+	var _Favorites2 = _interopRequireDefault(_Favorites);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -36900,11 +36904,19 @@
 	      };
 	      return new google.maps.Map(this.refs.map, mapOptions);
 	    }
+	
+	    // gather all positions from trails and render all markers on main map
+	
 	  }, {
 	    key: 'createMarker',
 	    value: function createMarker() {
-	      console.log('Main Map trails', this.props.trails);
 	      // map through trails for each position to make markers
+	      var trails = this.props.trails;
+	
+	
+	      var displayMarkers = (0, _lodash.map)(trails, function (marker) {
+	        return _react2.default.createElement(_Favorites2.default, _extends({ key: marker.position }, marker));
+	      });
 	      return new google.maps.Marker({
 	        position: this.props.coords,
 	        map: this.map
@@ -36918,7 +36930,7 @@
 	exports.default = MainMap;
 
 /***/ },
-/* 558 */
+/* 559 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -53944,7 +53956,42 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(490)(module)))
 
 /***/ },
-/* 559 */
+/* 560 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(514);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Favorites = function Favorites(trail) {
+	  return _react2.default.createElement(
+	    'section',
+	    { className: 'Favorites' },
+	    _react2.default.createElement(
+	      _reactRouter.Link,
+	      { to: '/Trail/' + trail.title },
+	      _react2.default.createElement(
+	        'p',
+	        { className: 'FavoriteTitle' },
+	        trail.title
+	      )
+	    )
+	  );
+	};
+	exports.default = Favorites;
+
+/***/ },
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53957,7 +54004,7 @@
 	
 	var _redux = __webpack_require__(476);
 	
-	var _Sidebar = __webpack_require__(560);
+	var _Sidebar = __webpack_require__(562);
 	
 	var _Sidebar2 = _interopRequireDefault(_Sidebar);
 	
@@ -53981,7 +54028,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Sidebar2.default);
 
 /***/ },
-/* 560 */
+/* 562 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54002,9 +54049,9 @@
 	
 	var _firebase2 = _interopRequireDefault(_firebase);
 	
-	var _lodash = __webpack_require__(558);
+	var _lodash = __webpack_require__(559);
 	
-	var _Favorites = __webpack_require__(561);
+	var _Favorites = __webpack_require__(560);
 	
 	var _Favorites2 = _interopRequireDefault(_Favorites);
 	
@@ -54028,8 +54075,14 @@
 	  _createClass(Sidebar, [{
 	    key: 'render',
 	    value: function render() {
-	      var displayFavorites = (0, _lodash.map)(this.props.auth.favorites, function (trail) {
-	        return _react2.default.createElement(_Favorites2.default, _extends({ key: trail.uid }, trail));
+	      var trailsList = this.props.trailsList;
+	
+	
+	      var displayFavorites = (0, _lodash.map)(this.props.auth.favorites, function (trailUid) {
+	        var trailData = trailsList.find(function (trail) {
+	          return trail.uid === trailUid;
+	        });
+	        return _react2.default.createElement(_Favorites2.default, _extends({ key: trailUid }, trailData));
 	      });
 	      return _react2.default.createElement(
 	        'aside',
@@ -54043,7 +54096,7 @@
 	        displayFavorites.length ? displayFavorites : _react2.default.createElement(
 	          'p',
 	          { className: 'FavoritesError' },
-	          'Make some favorites'
+	          'Login to make favorites'
 	        )
 	      );
 	    }
@@ -54055,42 +54108,7 @@
 	exports.default = Sidebar;
 
 /***/ },
-/* 561 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRouter = __webpack_require__(513);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Favorites = function Favorites(trail) {
-	  return _react2.default.createElement(
-	    'section',
-	    { className: 'Favorites' },
-	    _react2.default.createElement(
-	      _reactRouter.Link,
-	      { to: '/Trail/' + trail.title },
-	      _react2.default.createElement(
-	        'p',
-	        { className: 'FavoriteTitle' },
-	        trail.title
-	      )
-	    )
-	  );
-	};
-	exports.default = Favorites;
-
-/***/ },
-/* 562 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54101,9 +54119,9 @@
 	
 	var _reactRedux = __webpack_require__(469);
 	
-	var _actions = __webpack_require__(552);
+	var _actions = __webpack_require__(553);
 	
-	var _NewTrailForm = __webpack_require__(563);
+	var _NewTrailForm = __webpack_require__(564);
 	
 	var _NewTrailForm2 = _interopRequireDefault(_NewTrailForm);
 	
@@ -54120,7 +54138,7 @@
 	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(_NewTrailForm2.default);
 
 /***/ },
-/* 563 */
+/* 564 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54135,9 +54153,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(513);
+	var _reactRouter = __webpack_require__(514);
 	
-	var _NewMap = __webpack_require__(564);
+	var _NewMap = __webpack_require__(565);
 	
 	var _NewMap2 = _interopRequireDefault(_NewMap);
 	
@@ -54336,7 +54354,7 @@
 	exports.default = NewTrailForm;
 
 /***/ },
-/* 564 */
+/* 565 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54417,24 +54435,6 @@
 	      };
 	      return new google.maps.Map(this.refs.map, mapOptions);
 	    }
-	
-	    // setMarker(latLng) {
-	    //   console.log('setMarker', latLng.lat(), latLng.lng());
-	    //   this.setState({
-	    //     position: {
-	    //       lat: latLng.lat(),
-	    //       lng: latLng.lng()
-	    //     }
-	    //   })
-	    //   // add position to new trail being created
-	    //   // make array of coords to pull out and render specific i associated with uid?
-	    //   return new google.maps.Marker({
-	    //     animation: google.maps.Animation.DROP,
-	    //     position: latLng,
-	    //     map: this.map
-	    //   });
-	    // }
-	
 	  }]);
 	
 	  return NewMap;
@@ -54443,7 +54443,7 @@
 	exports.default = NewMap;
 
 /***/ },
-/* 565 */
+/* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54454,13 +54454,13 @@
 	
 	var _reactRedux = __webpack_require__(469);
 	
-	var _actions = __webpack_require__(552);
+	var _actions = __webpack_require__(553);
 	
 	var actions = _interopRequireWildcard(_actions);
 	
 	var _redux = __webpack_require__(476);
 	
-	var _TrailList = __webpack_require__(566);
+	var _TrailList = __webpack_require__(567);
 	
 	var _TrailList2 = _interopRequireDefault(_TrailList);
 	
@@ -54471,8 +54471,7 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    auth: state.auth,
-	    trailsList: state.trails.data,
-	    starTrail: state.trails.data.starTrail
+	    trailsList: state.trails.data
 	  };
 	};
 	
@@ -54483,7 +54482,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TrailList2.default);
 
 /***/ },
-/* 566 */
+/* 567 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54504,9 +54503,9 @@
 	
 	var _firebase2 = _interopRequireDefault(_firebase);
 	
-	var _lodash = __webpack_require__(558);
+	var _lodash = __webpack_require__(559);
 	
-	var _TrailCard = __webpack_require__(567);
+	var _TrailCard = __webpack_require__(568);
 	
 	var _TrailCard2 = _interopRequireDefault(_TrailCard);
 	
@@ -54532,11 +54531,13 @@
 	    value: function render() {
 	      var _this2 = this;
 	
-	      var displayTrails = (0, _lodash.map)(this.props.trailsList, function (trail) {
+	      var trailsList = this.props.trailsList;
+	
+	
+	      var displayTrails = (0, _lodash.map)(trailsList, function (trail) {
 	        return _react2.default.createElement(_TrailCard2.default, _extends({ key: trail.uid }, trail, { setSelectedTrail: _this2.props.setSelectedTrail }));
 	      });
 	
-	      // console.log(this.props);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'TrailList' },
@@ -54553,10 +54554,10 @@
 	exports.default = TrailList;
 
 /***/ },
-/* 567 */
+/* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -54586,43 +54587,44 @@
 	  }
 	
 	  _createClass(TrailCard, [{
-	    key: "goToDetails",
+	    key: 'goToDetails',
 	    value: function goToDetails() {
+	      var str = this.props.title;
+	      var trailName = str.replace(/\s/g, '-');
 	      this.props.setSelectedTrail(this.props.uid);
-	      // use regex to take out whitespace in trail name and replace with hyphen
-	      this.context.router.transitionTo("/Trail/" + this.props.title);
+	      this.context.router.transitionTo('/Trail/' + trailName);
 	    }
 	  }, {
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 	
 	      return _react2.default.createElement(
-	        "section",
-	        { className: "TrailCard",
+	        'section',
+	        { className: 'TrailCard',
 	          onClick: function onClick(e) {
 	            _this2.goToDetails();
 	          }
 	        },
-	        _react2.default.createElement("img", { src: "../public/assets/mountains-card.png", alt: "landscape", className: "TrailImg" }),
+	        _react2.default.createElement('img', { src: './assets/mountains-card.png', alt: 'landscape', className: 'TrailImg' }),
 	        _react2.default.createElement(
-	          "section",
-	          { className: "TopContainer" },
+	          'section',
+	          { className: 'TopContainer' },
 	          _react2.default.createElement(
-	            "h1",
-	            { className: "CardTitle" },
+	            'h1',
+	            { className: 'CardTitle' },
 	            this.props.title
 	          ),
 	          _react2.default.createElement(
-	            "p",
-	            { className: "CardMiles" },
+	            'p',
+	            { className: 'CardMiles' },
 	            this.props.miles,
-	            " miles"
+	            ' miles'
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "p",
-	          { className: "CardDesc" },
+	          'p',
+	          { className: 'CardDesc' },
 	          this.props.description
 	        )
 	      );
@@ -54639,7 +54641,7 @@
 	exports.default = TrailCard;
 
 /***/ },
-/* 568 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54652,11 +54654,11 @@
 	
 	var _redux = __webpack_require__(476);
 	
-	var _TrailDetails = __webpack_require__(569);
+	var _TrailDetails = __webpack_require__(570);
 	
 	var _TrailDetails2 = _interopRequireDefault(_TrailDetails);
 	
-	var _index = __webpack_require__(552);
+	var _index = __webpack_require__(553);
 	
 	var _auth = __webpack_require__(512);
 	
@@ -54681,7 +54683,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TrailDetails2.default);
 
 /***/ },
-/* 569 */
+/* 570 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54696,9 +54698,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _lodash = __webpack_require__(558);
+	var _lodash = __webpack_require__(559);
 	
-	var _DisplayMap = __webpack_require__(570);
+	var _DisplayMap = __webpack_require__(571);
 	
 	var _DisplayMap2 = _interopRequireDefault(_DisplayMap);
 	
@@ -54728,10 +54730,12 @@
 	    value: function render() {
 	      var _this2 = this;
 	
+	      // where does userId come from?
 	      var _props = this.props;
 	      var starTrail = _props.starTrail;
 	      var userId = _props.userId;
 	      var favorites = _props.favorites;
+	
 	
 	      var currentTrailData = (0, _lodash.find)(this.props.trailList, function (trail) {
 	        return trail.uid === _this2.props.selectedTrail;
@@ -54766,7 +54770,7 @@
 	          _react2.default.createElement(
 	            'section',
 	            { className: 'LeftContainer' },
-	            _react2.default.createElement('img', { src: '../../public/assets/mountains-card.png', alt: 'landscape', className: 'DetailImg' }),
+	            _react2.default.createElement('img', { src: './assets/mountains-card.png', alt: 'landscape', className: 'DetailImg' }),
 	            _react2.default.createElement(
 	              'p',
 	              { className: 'DetailDesc' },
@@ -54819,7 +54823,7 @@
 	exports.default = TrailDetails;
 
 /***/ },
-/* 570 */
+/* 571 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54890,7 +54894,7 @@
 	    value: function createMap() {
 	      var mapOptions = {
 	        center: DENVER_LATLONG,
-	        zoom: 10
+	        zoom: 8
 	      };
 	      return new google.maps.Map(this.refs.map, mapOptions);
 	    }
@@ -54910,7 +54914,7 @@
 	exports.default = DisplayMap;
 
 /***/ },
-/* 571 */
+/* 572 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -54940,16 +54944,16 @@
 	exports.default = NoMatch;
 
 /***/ },
-/* 572 */
+/* 573 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(573);
+	var content = __webpack_require__(574);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(575)(content, {});
+	var update = __webpack_require__(576)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -54966,21 +54970,21 @@
 	}
 
 /***/ },
-/* 573 */
+/* 574 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(574)();
+	exports = module.exports = __webpack_require__(575)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  background: #283739;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding: 5px 0 5px 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderLinks {\n  display: flex;\n  flex-direction: column;\n  margin-left: auto;\n  padding-right: 10px; }\n  @media screen and (min-width: 700px) {\n    .HeaderLinks {\n      padding-right: 20px;\n      flex-direction: row; } }\n\n.NewIcon {\n  color: white;\n  margin-bottom: 10px; }\n  @media screen and (min-width: 700px) {\n    .NewIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.ListIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .ListIcon {\n      margin-top: 15px;\n      margin-right: 15px; } }\n\n.User {\n  color: #A2C11C;\n  margin-bottom: 5px;\n  margin-top: 3px; }\n  @media screen and (min-width: 700px) {\n    .User {\n      margin-bottom: 10px; } }\n\n.AuthButton {\n  height: 30px;\n  width: 90px;\n  border-radius: 5px;\n  border: none;\n  color: white;\n  background: #2C5D63;\n  font-size: 1em; }\n  .AuthButton:hover {\n    border: 2px solid #A2C11C; }\n\n.DashboardView {\n  display: flex;\n  flex-flow: row wrap; }\n\n.Dashboard {\n  flex: none;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .Dashboard {\n      flex: 3;\n      height: 80vh; } }\n\n.SideBar {\n  flex: 1;\n  background: #2C5D63;\n  padding-bottom: 20px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .SideBar {\n      height: 83vh; } }\n\n.MtnIcon {\n  height: 40px;\n  width: 40px;\n  margin-top: 15px; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  margin: 20px 0;\n  font-size: 2.5em; }\n\n.FavoriteTitle {\n  color: white;\n  font-size: 1.5em;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.FavoritesError {\n  color: white; }\n\n.ZipSearch {\n  display: inline-flex;\n  margin-top: 10px;\n  margin-bottom: 10px; }\n\n.ZipInputs {\n  margin: 0 5px 0 5px; }\n\n.DashMain {\n  flex: 2; }\n\n.NatureQuote {\n  line-height: 20px;\n  margin: auto;\n  margin-bottom: 10px;\n  margin-top: 10px;\n  width: 85%;\n  background: #2C5D63;\n  border-radius: 5px;\n  color: white;\n  padding: 10px; }\n\n.MainMap {\n  margin: auto;\n  margin-top: 10px;\n  margin-bottom: 20px; }\n\n.ForecastCurrent {\n  margin: auto;\n  padding: 10px;\n  width: 90%; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 10px 20px; }\n\n.InputArea {\n  align-items: center;\n  display: flex;\n  width: 95%;\n  margin: auto;\n  margin-top: 40px;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .InputArea {\n      align-items: flex-start;\n      flex-direction: row; } }\n\n.NewTrailForm {\n  flex-direction: column;\n  align-items: flex-start; }\n\n.NewTrailLabel {\n  display: flex;\n  margin-bottom: 10px;\n  font-size: 1.5em; }\n\n.NewTrailField {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  margin-left: 5px;\n  font-size: 1.125em;\n  width: 300px; }\n\n.NewTrailLabel,\n.NewTrailField {\n  float: right;\n  margin-right: 50px; }\n\n.Buttons {\n  display: flex;\n  flex-direction: column;\n  margin-right: 175px;\n  margin-top: 300px; }\n\n.SaveButton,\n.CancelButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  float: right;\n  height: 30px;\n  width: 65px;\n  margin-bottom: 5px;\n  text-align: center; }\n  .SaveButton:hover,\n  .CancelButton:hover {\n    color: #A2C11C; }\n  @media screen and (min-width: 1100px) {\n    .SaveButton,\n    .CancelButton {\n      float: none; } }\n\n.RightSide {\n  display: flex;\n  flex-direction: column;\n  border-top: 2px solid black;\n  padding-top: 20px; }\n  @media screen and (min-width: 1100px) {\n    .RightSide {\n      border: none;\n      padding-top: 0; } }\n\n.Ranking {\n  display: inline-flex;\n  margin-bottom: 10px; }\n\n.TrailheadMap {\n  margin-top: 20px;\n  height: 400px;\n  width: 400px;\n  border: 1px solid #2C5D63; }\n\n.MarkerButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  margin: 5px 0 20px 0;\n  height: 30px;\n  width: 125px; }\n\n.TrailList {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  margin: 30px 50px 0 50px; }\n\n.TrailCard {\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #0C273D;\n  background-color: white;\n  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);\n  height: 300px;\n  width: 350px;\n  margin-bottom: 40px; }\n  .TrailCard:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n\n.CardLink {\n  text-decoration: none;\n  font-weight: bold;\n  color: black; }\n\n.TrailImg {\n  height: 170px;\n  overflow: hidden;\n  opacity: 1;\n  width: 100%;\n  background: #2C5E2E;\n  height: 170px; }\n\n.TopContainer {\n  display: flex; }\n\n.CardTitle,\n.CardMiles {\n  display: inline-block;\n  line-height: 1.5em;\n  font-size: 125%;\n  text-align: left;\n  padding-left: 5px;\n  margin-top: 5px; }\n\n.CardMiles {\n  margin-left: auto;\n  padding-right: 5px; }\n\n.CardDesc {\n  font-size: 0.9em;\n  line-height: 1.5em;\n  padding: 0 5px 5px 5px; }\n\n.TrailDetail {\n  display: flex;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .TrailDetail {\n      flex-direction: none; } }\n\n.TitleContainer {\n  display: flex;\n  align-items: center; }\n\n.MtnIconDetail {\n  display: inline-flex;\n  background: none;\n  height: 40px;\n  width: 40px;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .MtnIconDetail {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.DetailTitle {\n  display: inline-flex;\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 20px 30px; }\n  @media screen and (min-width: 1100px) {\n    .DetailTitle {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.FavoriteButton {\n  display: inline-flex;\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  height: 50px;\n  width: 90px;\n  margin-left: 40px;\n  padding: 5px; }\n  .FavoriteButton:hover {\n    background: #A2C11C;\n    border: 2px solid #2C5D63;\n    color: #283739; }\n\n.FullContainer {\n  display: flex;\n  flex-direction: column;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .FullContainer {\n      flex-direction: row; } }\n\n.LeftContainer {\n  display: flex;\n  flex-direction: column; }\n\n.DetailImg {\n  border: 10px solid #2C5D63;\n  width: 460px;\n  height: 288px; }\n\n.DetailDesc {\n  font-size: 18px;\n  line-height: 24px;\n  margin: 10px 0;\n  width: 600px; }\n\n.divider {\n  border: 2px solid #2C5D63;\n  width: 480px; }\n\n.DetailNotes {\n  margin-top: 5px; }\n\n.bold {\n  font-weight: bold; }\n\n.RightContainer {\n  display: flex;\n  flex-direction: column;\n  background: #2C5D63;\n  border: 5px solid #283739;\n  margin-top: 30px;\n  padding: 10px;\n  width: 450px; }\n  @media screen and (min-width: 1100px) {\n    .RightContainer {\n      margin-left: 8vw;\n      margin-top: 0; } }\n\n.InfoTitle {\n  color: white;\n  font-size: 36px; }\n\n.DetailMiles,\n.DetailElev {\n  color: white;\n  font-size: 18px;\n  line-height: 24px;\n  margin: 5px 0; }\n\n.DisplayMap {\n  margin: auto; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\ninput[type=range] {\n  -webkit-appearance: none;\n  /* Hides the slider so that custom slider can be made */\n  width: 100%;\n  /* Specific width is required for Firefox. */\n  background: transparent;\n  /* Otherwise white in Chrome */ }\n\ninput[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none; }\n\ninput[type=range]:focus {\n  outline: none;\n  /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */ }\n\ninput[type=range]::-ms-track {\n  width: 100%;\n  cursor: pointer;\n  /* Hides the slider so custom styles can be added */\n  background: transparent;\n  border-color: transparent;\n  color: transparent; }\n\n.MainHeader {\n  align-items: center;\n  background: #283739;\n  display: flex;\n  flex-direction: row;\n  height: 120px; }\n\n.MainTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  letter-spacing: 0px;\n  padding: 5px 0 5px 10px; }\n  @media screen and (min-width: 700px) {\n    .MainTitle {\n      font-size: 60px; } }\n  @media screen and (min-width: 900px) {\n    .MainTitle {\n      font-size: 62px; } }\n  @media screen and (min-width: 960px) {\n    .MainTitle {\n      font-size: 72px; } }\n\na {\n  text-decoration: none; }\n\n.HeaderLinks {\n  display: flex;\n  flex-direction: column;\n  margin-left: auto;\n  padding-right: 10px; }\n  @media screen and (min-width: 700px) {\n    .HeaderLinks {\n      flex-direction: row;\n      padding-right: 20px; } }\n\n.NewIcon {\n  color: white;\n  margin-bottom: 10px; }\n  @media screen and (min-width: 700px) {\n    .NewIcon {\n      margin-right: 15px;\n      margin-top: 15px; } }\n\n.ListIcon {\n  color: white;\n  margin-bottom: 5px; }\n  @media screen and (min-width: 700px) {\n    .ListIcon {\n      margin-right: 15px;\n      margin-top: 15px; } }\n\n.User {\n  color: #A2C11C;\n  margin-bottom: 5px;\n  margin-top: 3px; }\n  @media screen and (min-width: 700px) {\n    .User {\n      margin-bottom: 10px; } }\n\n.AuthButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  height: 30px;\n  width: 90px; }\n  .AuthButton:hover {\n    border: 2px solid #A2C11C; }\n\n.DashboardView {\n  display: flex;\n  flex-flow: row wrap; }\n\n.Dashboard {\n  flex: none;\n  margin: auto;\n  margin-top: 5px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .Dashboard {\n      flex: 3;\n      height: 80vh; } }\n\n.SideBar {\n  background: #2C5D63;\n  padding-bottom: 20px;\n  padding-left: 10px;\n  padding-right: 10px;\n  text-align: center; }\n  @media screen and (min-width: 900px) {\n    .SideBar {\n      height: 83vh; } }\n\n.MtnIcon {\n  height: 40px;\n  width: 40px;\n  margin-top: 15px; }\n\n.SideTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 2.5em;\n  margin: 20px 0; }\n\n.FavoriteTitle {\n  color: white;\n  font-size: 1.5em;\n  margin-bottom: 10px; }\n\n.FavoritesError {\n  color: white; }\n\n.ZipSearch {\n  display: inline-flex;\n  margin-top: 10px; }\n\n.FavoritesError {\n  color: white; }\n\n.DashMain {\n  flex: 2; }\n\n.NatureQuote {\n  background: #2C5D63;\n  border-radius: 5px;\n  color: white;\n  line-height: 20px;\n  margin: auto;\n  margin-bottom: 10px;\n  margin-top: 10px;\n  padding: 10px;\n  width: 85%; }\n\n.MainMap {\n  margin: auto;\n  margin-bottom: 20px;\n  margin-top: 10px; }\n\n.ForecastCurrent {\n  margin: auto;\n  padding: 10px;\n  width: 90%; }\n\n.NewTitle {\n  color: #A2C11C;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 10px 20px; }\n\n.InputArea {\n  align-items: center;\n  display: flex;\n  flex-direction: column;\n  margin: auto;\n  margin-top: 40px;\n  width: 95%; }\n  @media screen and (min-width: 1100px) {\n    .InputArea {\n      align-items: flex-start;\n      flex-direction: row; } }\n\n.NewTrailForm {\n  align-items: flex-start;\n  flex-direction: column; }\n\n.NewTrailLabel {\n  display: flex;\n  font-size: 1.5em;\n  margin-bottom: 10px; }\n\n.NewTrailField {\n  border: none;\n  border-bottom: 2px solid #2C5D63;\n  font-size: 1.125em;\n  margin-left: 5px;\n  width: 300px; }\n\n.NewTrailLabel,\n.NewTrailField {\n  float: right;\n  margin-right: 50px; }\n\n.Buttons {\n  display: flex;\n  flex-direction: column;\n  margin-right: 175px;\n  margin-top: 300px; }\n\n.SaveButton,\n.CancelButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  float: right;\n  height: 30px;\n  width: 65px;\n  margin-bottom: 5px;\n  text-align: center; }\n  .SaveButton:hover,\n  .CancelButton:hover {\n    color: #A2C11C; }\n  @media screen and (min-width: 1100px) {\n    .SaveButton,\n    .CancelButton {\n      float: none; } }\n\n.RightSide {\n  border-top: 2px solid black;\n  display: flex;\n  flex-direction: column;\n  padding-top: 20px; }\n  @media screen and (min-width: 1100px) {\n    .RightSide {\n      border: none;\n      padding-top: 0; } }\n\n.Ranking {\n  display: inline-flex;\n  margin-bottom: 10px; }\n\n.TrailheadMap {\n  border: 1px solid #2C5D63;\n  height: 400px;\n  width: 400px;\n  margin-top: 20px; }\n\n.MarkerButton {\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  margin: 5px 0 20px 0;\n  height: 30px;\n  width: 125px; }\n\n.TrailList {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  margin: 30px 50px 0 50px; }\n\n.TrailCard {\n  background-color: white;\n  border: 1px solid #0C273D;\n  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);\n  display: flex;\n  flex-direction: column;\n  height: 300px;\n  width: 350px;\n  margin-bottom: 40px; }\n  .TrailCard:hover {\n    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22); }\n\n.CardLink {\n  color: black;\n  font-weight: bold;\n  text-decoration: none; }\n\n.TrailImg {\n  background: #2C5E2E;\n  height: 170px;\n  width: 100%;\n  overflow: hidden;\n  opacity: 1; }\n\n.TopContainer {\n  display: flex; }\n\n.CardTitle,\n.CardMiles {\n  display: inline-block;\n  font-size: 125%;\n  line-height: 1.5em;\n  margin-top: 5px;\n  padding-left: 5px;\n  text-align: left; }\n\n.CardMiles {\n  margin-left: auto;\n  padding-right: 5px; }\n\n.CardDesc {\n  font-size: 0.9em;\n  line-height: 1.5em;\n  padding: 0 5px 5px 5px; }\n\n.TrailDetail {\n  display: flex;\n  flex-direction: column; }\n  @media screen and (min-width: 1100px) {\n    .TrailDetail {\n      flex-direction: none; } }\n\n.TitleContainer {\n  display: flex;\n  align-items: center; }\n\n.MtnIconDetail {\n  display: inline-flex;\n  background: none;\n  display: inline-block;\n  height: 40px;\n  width: 40px;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .MtnIconDetail {\n      display: inline-flex;\n      flex-direction: row; } }\n\n.DetailTitle {\n  display: inline-flex;\n  color: #A2C11C;\n  display: inline-block;\n  font-family: \"Fjalla One\", sans-serif;\n  font-size: 50px;\n  margin: 20px 0 20px 30px; }\n  @media screen and (min-width: 1100px) {\n    .DetailTitle {\n      flex-direction: row;\n      display: inline-flex; } }\n\n.FavoriteButton {\n  display: inline-flex;\n  background: #2C5D63;\n  border: none;\n  border-radius: 5px;\n  color: white;\n  font-size: 1em;\n  height: 50px;\n  width: 90px;\n  margin-left: 40px;\n  padding: 5px; }\n  .FavoriteButton:hover {\n    background: #A2C11C;\n    border: 2px solid #2C5D63;\n    color: #283739; }\n\n.FullContainer {\n  display: flex;\n  flex-direction: column;\n  margin-left: 30px; }\n  @media screen and (min-width: 1100px) {\n    .FullContainer {\n      flex-direction: row; } }\n\n.LeftContainer {\n  display: flex;\n  flex-direction: column; }\n\n.DetailImg {\n  border: 10px solid #2C5D63;\n  height: 288px;\n  width: 460px; }\n\n.DetailDesc {\n  font-size: 18px;\n  line-height: 24px;\n  margin: 10px 0;\n  width: 600px; }\n\n.divider {\n  border: 2px solid #2C5D63;\n  width: 480px; }\n\n.DetailNotes {\n  margin-top: 5px; }\n\n.bold {\n  font-weight: bold; }\n\n.RightContainer {\n  background: #2C5D63;\n  border: 5px solid #283739;\n  display: flex;\n  flex-direction: column;\n  margin-top: 30px;\n  width: 450px;\n  padding: 10px; }\n  @media screen and (min-width: 1100px) {\n    .RightContainer {\n      margin-left: 8vw;\n      margin-top: 0; } }\n\n.InfoTitle {\n  color: white;\n  font-size: 36px; }\n\n.DetailMiles,\n.DetailElev {\n  color: white;\n  font-size: 18px;\n  line-height: 24px;\n  margin: 5px 0; }\n\n.DisplayMap {\n  margin: auto; }\n\nbody {\n  font-family: \"Droid Sans\", sans-serif; }\n", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 574 */
+/* 575 */
 /***/ function(module, exports) {
 
 	/*
@@ -55036,7 +55040,7 @@
 
 
 /***/ },
-/* 575 */
+/* 576 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

@@ -8,10 +8,10 @@
 .InputArea {
   align-items: center;
   display: flex;
-  width: 95%;
+  flex-direction: column;
   margin: auto;
   margin-top: 40px;
-  flex-direction: column;
+  width: 95%;
   @media screen and (min-width: 1100px) {
     align-items: flex-start;
     flex-direction: row;
@@ -19,30 +19,27 @@
 }
 
 .NewTrailForm {
-  // background: #c1e9ff;
-  // flex: 1;
-  flex-direction: column;
   align-items: flex-start;
+  flex-direction: column;
 }
 
 .NewTrailLabel {
   display: flex;
-  margin-bottom: 10px;
   font-size: 1.5em;
+  margin-bottom: 10px;
 }
 
 .NewTrailField {
   border: none;
   border-bottom: 2px solid #2C5D63;
-  margin-left: 5px;
   font-size: 1.125em;
+  margin-left: 5px;
   width: 300px;
 }
 
 .NewTrailLabel,
 .NewTrailField {
   float: right;
-  // font-size: 1.25em;
   margin-right: 50px;
 }
 
@@ -74,9 +71,9 @@
 }
 
 .RightSide {
+  border-top: 2px solid black;
   display: flex;
   flex-direction: column;
-  border-top: 2px solid black;
   padding-top: 20px;
   @media screen and (min-width: 1100px) {
     border: none;
@@ -90,10 +87,10 @@
 }
 
 .TrailheadMap {
-  margin-top: 20px;
+  border: 1px solid #2C5D63;
   height: 400px;
   width: 400px;
-  border: 1px solid #2C5D63;
+  margin-top: 20px;
 }
 
 .MarkerButton {
