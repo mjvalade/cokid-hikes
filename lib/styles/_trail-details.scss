@@ -6,12 +6,17 @@
   }
 }
 
+.TitleContainer {
+  display: flex;
+  align-items: center;
+}
+
 .MtnIconDetail {
+  display: inline-flex;
   background: none;
   display: inline-block;
   height: 40px;
   width: 40px;
-  margin-top: 15px;
   margin-left: 30px;
   @media screen and (min-width: 1100px) {
     display: inline-flex;
@@ -20,6 +25,7 @@
 }
 
 .DetailTitle {
+  display: inline-flex;
   color: #A2C11C;
   display: inline-block;
   font-family: $header-font;
@@ -28,6 +34,24 @@
   @media screen and (min-width: 1100px) {
     flex-direction: row;
     display: inline-flex;
+  }
+}
+
+.FavoriteButton {
+  display: inline-flex;
+  background: #2C5D63;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1em;
+  height: 50px;
+  width: 90px;
+  margin-left: 40px;
+  padding: 5px;
+  &:hover {
+    background: #A2C11C;
+    border: 2px solid #2C5D63;
+    color: #283739;
   }
 }
 
